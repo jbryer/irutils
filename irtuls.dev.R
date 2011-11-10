@@ -67,4 +67,3 @@ Stangle('irutils.Rnw')
 Sweave('irutils.Rnw')
 texi2dvi('irutils.tex', pdf=TRUE)
 
-

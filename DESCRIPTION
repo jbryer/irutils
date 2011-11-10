@@ -11,10 +11,10 @@ License: What license is it under?
 LazyLoad: yes
 Collate:
     'age.R'
-    'barchartTable.R'
     'dbaccess.R'
-    'heatmapTable.R'
     'irutils-package.R'
     'Retention.Plot.R'
     'Retention.R'
     'saveIPEDStoDB.R'
+    'plotBarchartTable.R'
+    'plotHeatmapTable.R'

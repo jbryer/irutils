@@ -1,0 +1,182 @@
+\documentclass[letterpaper,11pt]{article}
+
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+\textwidth 6.5in
+%\headheight 0.0in
+
+\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{indentfirst}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{appendix}
+\usepackage{verbatim}
+\usepackage{lscape}
+\usepackage{rotating}
+
+
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+
+\usepackage{Sweave}
+\begin{document}
+
+\title{\texttt{irutils}: An R Package for Institutional Research}
+\author{Jason M. Bryer\\
+\small{}jbryer@expcelsior.edu\\
+Excelsior College}
+\date{\today}
+
+\maketitle
+
+\abstract{This document specifies the functions available in the \texttt{irutils} package. This package is designed to accomony the \textit{Introduction to R and \LaTeX} document. The package provides many functions useful for typical reporting requirements of Institutional Research offices.
+\ \\ \ \\
+\noindent Keywords: \textit{institutional research, database, higher education, ipeds}}
+
+
+\section{Introduction}
+
+\textit{Note: Sections in italics represent portions of the document that will only be available to Excelsior College staff.}
+
+\textit{Load the \texttt{ecir} package from the O drive. Using the \texttt{lib.loc} option will load the latest version directly from the O drive without the need of installing it first.}
+
+\begin{Schunk}
+\begin{Sinput}
+> library(ecir, lib.loc = "O:/Resources/R/library")
+\end{Sinput}
+\end{Schunk}
+
+
+\section{Database Access}
+
+For many Institutional Research offices the institutions student information system (SIS) is the most common source of data. Since virtually all SIS systems are backed by a database, extracting data requires extracting data using queries. Typically the language used to extract data is called structured query language (SQL) regardless if the database is provided by Oracle, Microsoft, or an open source options such as MySQL and PostgreSQL. There are a number of functions in this package that will faciliate extracting data from these databases directly into R.
+
+The database access functions provide an interface to a directory of SQL scripts. SQL scripts are simply a plain text file containing the query. The directory containing these files can be determined or set using the \texttt{getSQLRepos} and \texttt{setSQLRepos} functions, repsectively. 
+
+\begin{Schunk}
+\begin{Sinput}
+> getSQLRepos()
+\end{Sinput}
+\begin{Soutput}
+[1] "O:/Resources/R Packages/ecir/data"
+\end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> setSQLRepos("O:/Resources/R Packages/ecir/data")
+\end{Sinput}
+\end{Schunk}
+
+By convention, all SQL files must use a \texttt{.sql} file extension. The \texttt{getQueries} function will return a list of all the queries available in the current reposistory.
+
+\begin{Schunk}
+\begin{Sinput}
+> getQueries()
+\end{Sinput}
+\begin{Soutput}
+ [1] "CourseCancelations"               "EnrolledStudents"                
+ [3] "graduates"                        "GraduatesWithinRange"            
+ [5] "PendingGrades"                    "TransferCredit"                  
+ [7] "WarehouseData"                    "WarehouseDataWithCredits"        
+ [9] "WarehouseDataWithCreditsNoINLCCS" "WarehouseDataWithDemographics"   
+[11] "warehouseSummary"                
+\end{Soutput}
+\end{Schunk}
+
+The \texttt{getQueryDesc} and \texttt{getParameters} functions will provide some details about the query in question. In particular, the latter will return the parameters that are required for the query to execute.
+
+\begin{Schunk}
+\begin{Sinput}
+> getQueryDesc("GraduatesWithinRange")
+\end{Sinput}
+\begin{Soutput}
+[1] " This function returns all graduates in the given date range."
+\end{Soutput}
+\begin{Sinput}
+> getParameters("GraduatesWithinRange")
+\end{Sinput}
+\begin{Soutput}
+[1] "endDate"   "startDate"
+\end{Soutput}
+\end{Schunk}
+
+
+There are two functions available for executing the query. The \texttt{execQuery} will execute the query and return a data frame. The \texttt{cacheQuery} however, will first look in the specified directory (by default the \texttt{dir} parameter is set to \texttt{getwd()}) for a CSV file that matches the currently request query. That is, the file name (which is returned when this function is executed) is built using a combination of the query name and parameters to uniquely identify it. This is useful when using Sweave and \LaTeX for document preparation where the function may be executed multiple times but the data does not change. It is considerably faster to read data from a flat file then it is to query the database each time.
+
+\begin{Schunk}
+\begin{Sinput}
+> graduates = execQuery("GraduatesWithinRange", startDate = "01-JUL-2010", 
++     endDate = "30-JUN-2011")
+\end{Sinput}
+\end{Schunk}
+
+\begin{Schunk}
+\begin{Sinput}
+> graduates = cacheQuery("GraduatesWithinRange", startDate = "01-JUL-2010", 
++     endDate = "30-JUN-2011")
+\end{Sinput}
+\begin{Soutput}
+[1] "Cahced query file: C:/Temp/GraduatesWithinRange.endDate.30-JUN-2011.startDate.01-JUL-2010.csv"
+\end{Soutput}
+\end{Schunk}
+
+\subsection{Creating Your Own Query}
+
+To create your own query, simply place the SQL statement in its own text file ending with \texttt{.sql}. Comments can be placed in the file using the \texttt{\#} symbol. Placing informative comments at the beginning of the file will be useful since the \texttt{getQueryDesc} function will return these comments to the user. Parameters can be placed anywhere in the file and must be enclosed within colons (i.e. the : character). Additionally, parameter names must begin with a letter, contain only letters and numbers, and cannot have any spaces.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics{DiscovererMenu}
+\caption{Beginning 72-Month Completion Rates by Military Status}
+\label{fig:discoverer}
+\end{center}
+\end{figure}
+
+\textit{At Excelsior College, Oracle Discoverer is the most common approach to extracting data from SIS. Once a desired report is created using Discover, the SQL statement can be viewed using the "View" menu, then "SQL Inspector" (see Figure \ref{fig:discoverer}). Figure \ref{fig:sqlinspector} represents the resulting SQL Inspector view. Copy and paste the query (excluding the trailing semicolon) to a new text document and save it with an appropriate name. Parameters will need to be changed according to the rules described above. It is useful if a comment is placed at the top of the file describing the query and table names be changed from the numeric representation in the FROM claus to more meaningful names. It should also be noted that Oracle functions will not be automatically aliased. That is, the full function name will be used as the variable name. The final query (GraduatesWithinRange) represented in Figure \ref{fig:sqlinspector} is provided below.}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics{SQLInspector}
+\caption{SQL Inspector}
+\label{fig:sqlinspector}
+\end{center}
+\end{figure}
+
+\begin{Schunk}
+\begin{Sinput}
+> query = getQuery("GraduatesWithinRange")
+> strwrap(query, width = 80, exdent = 5)
+\end{Sinput}
+\begin{Soutput}
+ [1] "SELECT DISTINCT PROD.DISCOVERFUNCTIONS.ETHNICITY_CODES(contact.CONTACT_ID_SEQ)" 
+ [2] "     ETHNICITY_CODES,"                                                          
+ [3] "     PROD.SIS_CONTACT.ACTIVE_MILITARY_STUDENT(contact.CONTACT_ID_SEQ)"          
+ [4] "     ACTIVE_MILITARY_STUDENT,"                                                  
+ [5] "     PROD.DISCOVERFUNCTIONS.ENROLL_DATE(studentSvcItem.SVC_ITEM_ID_SEQ)"        
+ [6] "     ENROLL_DATE,"                                                              
+ [7] "     PROD.DISCOVERFUNCTIONS.ETHNICITY_SUMMARY(contact.CONTACT_ID_SEQ)"          
+ [8] "     ETHNICITY_SUMMARY, TRUNC(("                                                
+ [9] "     studentSvcStatus.START_DATE-contact.DATE_OF_BIRTH )/365)"                  
+[10] "     AGE_AT_GRADUATION, address.COUNTRY_CODE, address.STATE_CODE,"              
+[11] "     contact.DATE_OF_BIRTH, contact.GENDER, degreeRef.DIVISION_CODE,"           
+[12] "     studentSvcItem.SVC_ITEM_ID_SEQ, studentSvcItem.SVC_PROGRAM_CODE,"          
+[13] "     studentSvcItem.DEGREE_CODE, studentSvcItem.CONTACT_ID_SEQ,"                
+[14] "     studentSvcStatus.START_DATE, studentSvcStatus.STUDENT_STATUS_CODE FROM"    
+[15] "     PROD.ADDRESS address, PROD.CONTACT contact, PROD.DEGREE_REF degreeRef,"    
+[16] "     PROD.STUDENT_SVC_ITEM studentSvcItem, PROD.STUDENT_SVC_STATUS"             
+[17] "     studentSvcStatus WHERE ( ( contact.CONTACT_ID_SEQ = address.CONTACT_ID_SEQ"
+[18] "     ) AND ( contact.CONTACT_ID_SEQ = studentSvcItem.CONTACT_ID_SEQ ) AND ("    
+[19] "     degreeRef.DEGREE_CODE = studentSvcItem.DEGREE_CODE ) AND ("                
+[20] "     studentSvcItem.SVC_ITEM_ID_SEQ = studentSvcStatus.SVC_ITEM_ID_SEQ ) ) AND" 
+[21] "     ( address.ADDRESS_TYPE_CODE = 'P' ) AND ( studentSvcStatus.START_DATE <="  
+[22] "     ':endDate:' ) AND ( studentSvcStatus.START_DATE >= ':startDate:' ) AND ("  
+[23] "     studentSvcStatus.STUDENT_STATUS_CODE IN ('GR','CC') ) ORDER BY"            
+[24] "     studentSvcStatus.START_DATE ASC"                                           
+\end{Soutput}
+\end{Schunk}
+
+
+\end{document}

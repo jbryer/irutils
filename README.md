@@ -9,4 +9,6 @@ If you are an instituional researcher, it is likely you will want to install the
 
 	install.packages(c('ipeds'), repos=c('http://r-forge.r-project.org', 'http://cran.r-project.org'))
 
+![How often do you read these materials because you want to?](/man/doc/item29.barchart.png)
+
 More documentation to come.

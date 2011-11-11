@@ -18,3 +18,4 @@ Collate:
     'saveIPEDStoDB.R'
     'plotBarchartTable.R'
     'plotHeatmapTable.R'
+    'LocalRepos.R'

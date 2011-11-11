@@ -6,7 +6,7 @@
 #' @title Utility functions for Institutional Research
 #' @author \email{jason@@bryer.org}
 #' @keywords package institutional research
-#' @import reshape ggplot2
+#' @import reshape ggplot2 tools
 NULL
 
 #' North American (i.e. Canada, Mexico, and United States) results from the 2009
@@ -22,6 +22,8 @@ NULL
 NULL
 
 sqlrepos <- NULL
+cranMain = 'http://cran.r-project.org' #Main CRAN
+cranExtra = 'http://www.stats.ox.ac.uk/pub/RWin' #Windows Binaries for some packages
 
 .onLoad <- function(libname, pkgname) {
 	sqlrepos <- paste(system.file(package='irutils'), '/data', sep='')

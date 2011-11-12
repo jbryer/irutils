@@ -1,4 +1,8 @@
+library(irutils)
+library(ggplot2)
+
 theme_update(panel.background=theme_blank(), panel.grid.major=theme_blank(), panel.border=theme_blank())
+
 
 #Testing the plotting functions
 #How much do you agree or disagree with these statements about reading?
@@ -24,7 +28,7 @@ for(i in 1:ncol(items28)) {
 
 plotBarchartTable(items28, low.color='maroon', high.color='burlywood4')
 plotBarchartTable(items28, grouping=pisa$CNT, low.color='maroon', high.color='burlywood4')
-plotBeatmapTable(items28)
+plotHeatmapTable(items28)
 
 
 #How often do you read these materials because you want to?

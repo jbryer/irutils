@@ -9,6 +9,6 @@ If you are an instituional researcher, it is likely you will want to install the
 
 	install.packages(c('ipeds'), repos=c('http://r-forge.r-project.org', 'http://cran.r-project.org'))
 
-![How often do you read these materials because you want to?](https://github.com/jbryer/irutils/blob/master/man/doc/item29.barchart.png?raw=true)
+![How often do you read these materials because you want to?](https://github.com/jbryer/irutils/blob/master/inst/doc/item29.barchart.png?raw=true)
 
 More documentation to come.

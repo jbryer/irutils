@@ -1,0 +1,29 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{%
+Wickham%
+}{%
+Wickham%
+}{%
+{\protect\APACyear{2011}}%
+}]{%
+devtools}%
+\APACinsertmetastar{%
+devtools}%
+Wickham, H.%
+%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2011}{}{}.
+\newblock
+\BBOQ{}\APACrefatitle{devtools: Tools to make developing R code
+  easier}{devtools: Tools to make developing r code easier}\BBCQ{}\
+  [\bibcomputersoftwaremanual].
+\newblock
+ \begin{APACrefURL} \url{http://CRAN.R-project.org/package=devtools}
+  \end{APACrefURL}
+\newblock
+\APACrefnote{R package version 0.4}
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

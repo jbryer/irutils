@@ -3,7 +3,7 @@
 #' @export
 getSQLRepos <- function() {
 	if(is.null(sqlrepos)) {
-		sqlrepos <- paste(system.file(package='irutils'), '/data', sep='')
+		sqlrepos <<- paste(system.file(package='irutils'), '/data', sep='')
 	}
 	return(sqlrepos)
 }
@@ -12,7 +12,7 @@ getSQLRepos <- function() {
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 setSQLRepos <- function(repos) {
-	sqlrepos <- repos
+	sqlrepos <<- repos
 }
 
 #' Returns a list of available queries in the current repository.

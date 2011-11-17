@@ -3,8 +3,9 @@
 \oddsidemargin 0.0in
 \evensidemargin 0.0in
 \textwidth 6.5in
-%\headheight 0.0in
 
+
+\usepackage[tocbib,bibnewpage]{apacite}
 \usepackage{graphics}
 \usepackage{amsmath}
 \usepackage{indentfirst}
@@ -15,6 +16,10 @@
 \usepackage{verbatim}
 \usepackage{lscape}
 \usepackage{rotating}
+
+\usepackage{ifthen}
+\newboolean{internal}
+\setboolean{internal}{true} %===== Internal Document =====%
 
 
 \DeclareMathOperator{\var}{var}
@@ -38,15 +43,53 @@ Excelsior College}
 
 \section{Introduction}
 
+\ifthenelse{\boolean{internal}}{
 \textit{Note: Sections in italics represent portions of the document that will only be available to Excelsior College staff.}
 
 \textit{Load the \texttt{ecir} package from the O drive. Using the \texttt{lib.loc} option will load the latest version directly from the O drive without the need of installing it first.}
 
+}{}
+
 \begin{Schunk}
 \begin{Sinput}
-> library(ecir, lib.loc = "O:/Resources/R/library")
+> library(ecir, lib.loc='O:/Resources/R/library')
 \end{Sinput}
 \end{Schunk}
+
+The \texttt{irutils} package is hosted at \url{http://github.com/jbryer/irutils}. The \texttt{devtools} \cite{devtools} package provides functions to assist in R package development including a function to install directly from github. The \texttt{install\_github} will install the latest development version of the \texttt{irutils} package.
+
+\begin{Schunk}
+\begin{Sinput}
+> library(devtools)
+> install_github('devtools', 'jbryer')
+\end{Sinput}
+\end{Schunk}
+
+The currently available functions are:
+\begin{Schunk}
+\begin{Sinput}
+> library(irutils)
+> ls('package:irutils')
+\end{Sinput}
+\begin{Soutput}
+ [1] "cacheQuery"               "cohortRetention"         
+ [3] "cohortSummary"            "cohortSummaryLaTeX"      
+ [5] "createLocalRepos"         "execQuery"               
+ [7] "fySummary"                "fySummaryLaTeX"          
+ [9] "getAge"                   "getAgeGroups"            
+[11] "getAgeGroupsIPEDS"        "getParameters"           
+[13] "getQueries"               "getQuery"                
+[15] "getQueryDesc"             "getSQLRepos"             
+[17] "local.available.packages" "local.install.packages"  
+[19] "plotBarchartTable"        "plotCohortRetention"     
+[21] "plotHeatmapTable"         "plotPersistence"         
+[23] "plotRetention"            "plotRetentionOverall"    
+[25] "retention"                "retentionSummary"        
+[27] "retentionSummaryLaTeX"    "saveIPEDStoDB"           
+[29] "setSQLRepos"              "updateLocalRepos"        
+\end{Soutput}
+\end{Schunk}
+
 
 
 \section{Database Access}
@@ -60,13 +103,13 @@ The database access functions provide an interface to a directory of SQL scripts
 > getSQLRepos()
 \end{Sinput}
 \begin{Soutput}
-[1] "O:/Resources/R Packages/ecir/data"
+[1] "C:/Program Files/R/R-2.14.0/library/irutils/data"
 \end{Soutput}
 \end{Schunk}
 
 \begin{Schunk}
 \begin{Sinput}
-> setSQLRepos("O:/Resources/R Packages/ecir/data")
+> setSQLRepos( "O:/Resources/R Packages/ecir/data")
 \end{Sinput}
 \end{Schunk}
 
@@ -77,12 +120,13 @@ By convention, all SQL files must use a \texttt{.sql} file extension. The \textt
 > getQueries()
 \end{Sinput}
 \begin{Soutput}
- [1] "CourseCancelations"               "EnrolledStudents"                
- [3] "graduates"                        "GraduatesWithinRange"            
- [5] "PendingGrades"                    "TransferCredit"                  
- [7] "WarehouseData"                    "WarehouseDataWithCredits"        
- [9] "WarehouseDataWithCreditsNoINLCCS" "WarehouseDataWithDemographics"   
-[11] "warehouseSummary"                
+ [1] "Alumni"                           "CourseCancelations"              
+ [3] "EnrolledStudents"                 "graduates"                       
+ [5] "GraduatesWithinRange"             "PendingGrades"                   
+ [7] "TransferCredit"                   "TransferCreditDetail"            
+ [9] "WarehouseData"                    "WarehouseDataWithCredits"        
+[11] "WarehouseDataWithCreditsNoINLCCS" "WarehouseDataWithDemographics"   
+[13] "warehouseSummary"                
 \end{Soutput}
 \end{Schunk}
 
@@ -90,13 +134,13 @@ The \texttt{getQueryDesc} and \texttt{getParameters} functions will provide some
 
 \begin{Schunk}
 \begin{Sinput}
-> getQueryDesc("GraduatesWithinRange")
+> getQueryDesc('GraduatesWithinRange')
 \end{Sinput}
 \begin{Soutput}
 [1] " This function returns all graduates in the given date range."
 \end{Soutput}
 \begin{Sinput}
-> getParameters("GraduatesWithinRange")
+> getParameters('GraduatesWithinRange')
 \end{Sinput}
 \begin{Soutput}
 [1] "endDate"   "startDate"
@@ -108,18 +152,18 @@ There are two functions available for executing the query. The \texttt{execQuery
 
 \begin{Schunk}
 \begin{Sinput}
-> graduates = execQuery("GraduatesWithinRange", startDate = "01-JUL-2010", 
-+     endDate = "30-JUN-2011")
+> graduates = execQuery('GraduatesWithinRange', 
++ 	startDate='01-JUL-2010', endDate='30-JUN-2011')
 \end{Sinput}
 \end{Schunk}
 
 \begin{Schunk}
 \begin{Sinput}
-> graduates = cacheQuery("GraduatesWithinRange", startDate = "01-JUL-2010", 
-+     endDate = "30-JUN-2011")
+> graduates = cacheQuery('GraduatesWithinRange', 
++ 	startDate='01-JUL-2010', endDate='30-JUN-2011')
 \end{Sinput}
 \begin{Soutput}
-[1] "Cahced query file: C:/Temp/GraduatesWithinRange.endDate.30-JUN-2011.startDate.01-JUL-2010.csv"
+[1] "Cached query file: C:/Dropbox/My Dropbox/Projects/irutils/inst/doc/GraduatesWithinRange.endDate.30-JUN-2011.startDate.01-JUL-2010.csv"
 \end{Soutput}
 \end{Schunk}
 
@@ -147,8 +191,8 @@ To create your own query, simply place the SQL statement in its own text file en
 
 \begin{Schunk}
 \begin{Sinput}
-> query = getQuery("GraduatesWithinRange")
-> strwrap(query, width = 80, exdent = 5)
+> query = getQuery('GraduatesWithinRange')
+> strwrap(query, width=80, exdent=5)
 \end{Sinput}
 \begin{Soutput}
  [1] "SELECT DISTINCT PROD.DISCOVERFUNCTIONS.ETHNICITY_CODES(contact.CONTACT_ID_SEQ)" 
@@ -177,6 +221,56 @@ To create your own query, simply place the SQL statement in its own text file en
 [24] "     studentSvcStatus.START_DATE ASC"                                           
 \end{Soutput}
 \end{Schunk}
+
+
+
+\section{Visualizing Likert Response Items}
+
+\begin{Schunk}
+\begin{Sinput}
+> data(pisa)
+> items28 = pisa[,substr(names(pisa), 1,5) == 'ST24Q']
+> names(items28) = c("I read only if I have to.",
++    "Reading is one of my favorite hobbies.",
++    "I like talking about books with other people.",
++    "I find it hard to finish books.",
++    "I feel happy if I receive a book as a present.",
++    "For me, reading is a waste of time.",
++    "I enjoy going to a bookstore or a library.",
++    "I read only to get information that I need.",
++    "I cannot sit still and read for more than a few minutes.",
++    "I like to express my opinions about books I have read.",
++    "I like to exchange books with my friends")
+> for(i in 1:ncol(items28)) {
++ 	items28[,i] = factor(items28[,i], levels=1:4, 
++ 		labels=c('Strongly disagree', 'Disagree', 'Agree', 'Strongly Agree'),
++ 		ordered=TRUE)
++ }
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}
+\begin{center}
+\includegraphics{irutils-PISAItem28BarchartTable1}
+\caption{Barchart Table Graphic}
+\label{fig:PISAItem28BarchartTable1}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics{irutils-PISAItem28BarchartTable2}
+\caption{Barchart Table Graphic Grouped by Country}
+\label{fig:PISAItem28BarchartTable2}
+\end{center}
+\end{figure}
+
+
+
+
+\clearpage
+\bibliographystyle{apacite}
+\bibliography{Bibliography}
 
 
 \end{document}

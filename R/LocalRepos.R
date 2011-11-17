@@ -89,3 +89,55 @@ local.install.packages <- function(pkgs, local.repos, type='source') {
 	install.packages(toinstall, repos=NULL, contrib.url=local.contriburl, available=local.pkgs, type=type)
 }
 
+# local.install <- function(pkgs, local.repos, ...) {
+# 	irutils.httpd.handler <- function(path, query, ...) {
+# 		path = gsub("^/custom/irutils/", "", path)
+# 		f = sprintf("%s%s%s",
+# 					 local.repos,
+# 					 .Platform$file.sep,
+# 					 path) 
+# 		list(file=f,
+# 			 "content-type"="text/html",
+# 			 "status code"=200L)
+# 	}
+# 
+# 	if(!tools:::httpdPort > 0L) {
+# 		tools:::startDynamicHelp()
+# 	}
+# 	env = get(".httpd.handlers.env", asNamespace("tools"))
+# 	env[["irutils"]] = irutils.httpd.handler
+# 	root.dir = local.repos
+# 	file = file.path(local.repos)
+# 	.url = sprintf("http://127.0.0.1:%s/custom/irutils", 
+# 				tools:::httpdPort)
+# 	#browseURL(.url)
+# 	install.packages(pkgs, repos=.url, ...)
+# }
+# 
+# local.available <- function(local.repos, ...) {
+# 	irutils.httpd.handler <- function(path, query, ...) {
+# 		path = gsub("^/custom/irutils/", "", path)
+# 		f = sprintf("%s%s%s",
+# 					local.repos,
+# 					.Platform$file.sep,
+# 					path) 
+# 		list(file=f,
+# 			 "content-type"="text/html",
+# 			 "status code"=200L)
+# 	}
+# 	
+# 	if(!tools:::httpdPort > 0L) {
+# 		tools:::startDynamicHelp()
+# 	}
+# 	env = get(".httpd.handlers.env", asNamespace("tools"))
+# 	env[["irutils"]] = irutils.httpd.handler
+# 	root.dir = local.repos
+# 	file = file.path(local.repos)
+# 	.url = sprintf("http://127.0.0.1:%s/custom/irutils", 
+# 				   tools:::httpdPort)
+# 	available.packages(contriburl=contrib.url(.url, ...), ...)
+# }
+# 
+# local.available('E:/Rrepos', type='win.binary')
+# local.install('abind', 'E:/Rrepos/', type='source')
+# available.packages(contrib.url('http://127.0.0.1:18778/custom/irutils', type='win.source'), type='source')

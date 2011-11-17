@@ -19,3 +19,5 @@ Collate:
     'plotBarchartTable.R'
     'plotHeatmapTable.R'
     'LocalRepos.R'
+    'geocode.R'
+    'xtable.R'

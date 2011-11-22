@@ -9,6 +9,8 @@ Description: More about what it does (maybe more than one
     line)
 License: What license is it under?
 LazyLoad: yes
+Depends:
+    ggplot2
 Collate:
     'age.R'
     'dbaccess.R'

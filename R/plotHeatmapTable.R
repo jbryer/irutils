@@ -2,8 +2,8 @@
 #' survey items.
 #' @param items the items to summarize.
 #' @export
-plotHeatmapTable <- function(items, nlevels=length(which(!is.na(unique(items[,i])))),
-			low.color='white', high.color='blue') 
+plotHeatmapTable <- function(items, nlevels=length(levels(items[,1])),
+			low.color='white', high.color='blue', text.size=2) 
 {	
 	results = data.frame(Response=1:nlevels)
 	for(i in 1:ncol(items)) {
@@ -26,8 +26,8 @@ plotHeatmapTable <- function(items, nlevels=length(which(!is.na(unique(items[,i]
 	results = melt(results, id=c('item','mean','sd'))
 	results$variable = factor(results$variable, levels=paste('V', 1:nlevels, sep=''), labels=levels(items[,1]))
 	p = ggplot(results, aes(x=item, y=variable, fill=value, label=paste(value, '%', sep=''))) + 
-		geom_text(aes(y='Mean (SD)', x=item, label=paste(format(mean, digits=3, drop0trailing=FALSE), ' (', format(sd, digits=2, drop0trailing=FALSE), ')', sep=''))) +
-		geom_tile() + geom_text() + coord_flip() + 
+		geom_text(aes(y='Mean (SD)', x=item, label=paste(format(mean, digits=3, drop0trailing=FALSE), ' (', format(sd, digits=2, drop0trailing=FALSE), ')', sep='')), size=text.size) +
+		geom_tile() + geom_text(size=text.size) + coord_flip() + 
 		scale_fill_gradient("Percent", low=low.color, high=high.color, limits=c(0,100)) + 
 		xlab('') + ylab('') + 
 		opts(panel.grid.major=theme_blank(), panel.grid.minor=theme_blank(), axis.ticks=theme_blank())

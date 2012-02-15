@@ -1,25 +1,32 @@
 Package: irutils
 Type: Package
-Title: What the package does (short line)
+Title: Collection of utility functions for Institutional Research.
 Version: 1.0
 Date: 2011-10-06
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one
-    line)
+Author: Jason Bryer <jason@bryer.org>
+Maintainer: Jason Bryer <jason@bryer.org>
+Description: Collection of utility functions for Institutional Research.
 License: What license is it under?
 LazyLoad: yes
 Depends:
-    ggplot2
+    ggplot2,
+    xtable,
+    psych
 Collate:
     'age.R'
     'dbaccess.R'
     'irutils-package.R'
-    'Retention.Plot.R'
     'Retention.R'
     'saveIPEDStoDB.R'
-    'plotBarchartTable.R'
-    'plotHeatmapTable.R'
     'LocalRepos.R'
     'geocode.R'
     'xtable.R'
+    'adjustedTableLaTeX.R'
+    'demographics.R'
+    'ggplot_size_legend.R'
+    'likert.R'
+    'pie.R'
+    'plot.CohortRetention.R'
+    'plot.Persistence.R'
+    'plot.Retention.R'
+    'plot.RetentionOverall.R'

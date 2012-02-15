@@ -10,7 +10,6 @@ setwd("~/Dropbox/Projects") #Mac
 setwd("C:/Dropbox/My Dropbox/Projects") #Windows
 
 #Package building
-document("irutils", clean=TRUE)
 document("irutils")
 check_doc("irutils")
 build("irutils", binary=FALSE)
@@ -20,16 +19,8 @@ check("irutils")
 library(irutils)
 ls('package:irutils')
 
-#Build Vignette
-setwd("C:/Dropbox/My Dropbox/Projects/irutils")
-setwd(paste(getwd(), '/man/doc/', sep=''))
-getwd()
-Stangle('irutils.Rnw')
-Sweave('irutils.Rnw')
-texi2dvi('irutils.tex', pdf=TRUE)
-
 #Load included data
-data(pisa)
+data(pisana)
 
 
 #Setup the SQLite database

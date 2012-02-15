@@ -43,19 +43,6 @@ Excelsior College}
 
 \section{Introduction}
 
-\ifthenelse{\boolean{internal}}{
-\textit{Note: Sections in italics represent portions of the document that will only be available to Excelsior College staff.}
-
-\textit{Load the \texttt{ecir} package from the O drive. Using the \texttt{lib.loc} option will load the latest version directly from the O drive without the need of installing it first.}
-
-}{}
-
-\begin{Schunk}
-\begin{Sinput}
-> library(ecir, lib.loc='O:/Resources/R/library')
-\end{Sinput}
-\end{Schunk}
-
 The \texttt{irutils} package is hosted at \url{http://github.com/jbryer/irutils}. The \texttt{devtools} \cite{devtools} package provides functions to assist in R package development including a function to install directly from github. The \texttt{install\_github} will install the latest development version of the \texttt{irutils} package.
 
 \begin{Schunk}
@@ -72,21 +59,25 @@ The currently available functions are:
 > ls('package:irutils')
 \end{Sinput}
 \begin{Soutput}
- [1] "cacheQuery"               "cohortRetention"         
- [3] "cohortSummary"            "cohortSummaryLaTeX"      
- [5] "createLocalRepos"         "execQuery"               
- [7] "fySummary"                "fySummaryLaTeX"          
- [9] "getAge"                   "getAgeGroups"            
-[11] "getAgeGroupsIPEDS"        "getParameters"           
-[13] "getQueries"               "getQuery"                
-[15] "getQueryDesc"             "getSQLRepos"             
-[17] "local.available.packages" "local.install.packages"  
-[19] "plotBarchartTable"        "plotCohortRetention"     
-[21] "plotHeatmapTable"         "plotPersistence"         
-[23] "plotRetention"            "plotRetentionOverall"    
-[25] "retention"                "retentionSummary"        
-[27] "retentionSummaryLaTeX"    "saveIPEDStoDB"           
-[29] "setSQLRepos"              "updateLocalRepos"        
+ [1] "adjustedTableLaTeX"       "cacheQuery"              
+ [3] "cohortRetention"          "cohortSummary"           
+ [5] "cohortSummaryLaTeX"       "createLocalRepos"        
+ [7] "execQuery"                "fySummary"               
+ [9] "fySummaryLaTeX"           "geocode.google"          
+[11] "geocode.ips"              "geocode.yahoo"           
+[13] "geolite.delete"           "geolite.load"            
+[15] "geolite.update"           "geolite.version"         
+[17] "getAge"                   "getAgeGroups"            
+[19] "getAgeGroupsIPEDS"        "getParameters"           
+[21] "getQueries"               "getQuery"                
+[23] "getQueryDesc"             "getSQLRepos"             
+[25] "local.available.packages" "local.install.packages"  
+[27] "plotBarchartTable"        "plotCohortRetention"     
+[29] "plotHeatmapTable"         "plotPersistence"         
+[31] "plotRetention"            "plotRetentionOverall"    
+[33] "retention"                "retentionSummary"        
+[35] "retentionSummaryLaTeX"    "saveIPEDStoDB"           
+[37] "setSQLRepos"              "updateLocalRepos"        
 \end{Soutput}
 \end{Schunk}
 
@@ -103,14 +94,8 @@ The database access functions provide an interface to a directory of SQL scripts
 > getSQLRepos()
 \end{Sinput}
 \begin{Soutput}
-[1] "C:/Program Files/R/R-2.14.0/library/irutils/data"
+[1] "O:/Resources/R/library/irutils/data"
 \end{Soutput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-> setSQLRepos( "O:/Resources/R Packages/ecir/data")
-\end{Sinput}
 \end{Schunk}
 
 By convention, all SQL files must use a \texttt{.sql} file extension. The \texttt{getQueries} function will return a list of all the queries available in the current reposistory.
@@ -120,13 +105,7 @@ By convention, all SQL files must use a \texttt{.sql} file extension. The \textt
 > getQueries()
 \end{Sinput}
 \begin{Soutput}
- [1] "Alumni"                           "CourseCancelations"              
- [3] "EnrolledStudents"                 "graduates"                       
- [5] "GraduatesWithinRange"             "PendingGrades"                   
- [7] "TransferCredit"                   "TransferCreditDetail"            
- [9] "WarehouseData"                    "WarehouseDataWithCredits"        
-[11] "WarehouseDataWithCreditsNoINLCCS" "WarehouseDataWithDemographics"   
-[13] "warehouseSummary"                
+[1] "TestQuery"
 \end{Soutput}
 \end{Schunk}
 
@@ -134,38 +113,20 @@ The \texttt{getQueryDesc} and \texttt{getParameters} functions will provide some
 
 \begin{Schunk}
 \begin{Sinput}
-> getQueryDesc('GraduatesWithinRange')
+> getQueryDesc('TestQuery')
 \end{Sinput}
 \begin{Soutput}
-[1] " This function returns all graduates in the given date range."
+[1] ""
 \end{Soutput}
 \begin{Sinput}
-> getParameters('GraduatesWithinRange')
+> getParameters('TestQuery')
 \end{Sinput}
 \begin{Soutput}
-[1] "endDate"   "startDate"
+[1] "ContactID"
 \end{Soutput}
 \end{Schunk}
-
 
 There are two functions available for executing the query. The \texttt{execQuery} will execute the query and return a data frame. The \texttt{cacheQuery} however, will first look in the specified directory (by default the \texttt{dir} parameter is set to \texttt{getwd()}) for a CSV file that matches the currently request query. That is, the file name (which is returned when this function is executed) is built using a combination of the query name and parameters to uniquely identify it. This is useful when using Sweave and \LaTeX for document preparation where the function may be executed multiple times but the data does not change. It is considerably faster to read data from a flat file then it is to query the database each time.
-
-\begin{Schunk}
-\begin{Sinput}
-> graduates = execQuery('GraduatesWithinRange', 
-+ 	startDate='01-JUL-2010', endDate='30-JUN-2011')
-\end{Sinput}
-\end{Schunk}
-
-\begin{Schunk}
-\begin{Sinput}
-> graduates = cacheQuery('GraduatesWithinRange', 
-+ 	startDate='01-JUL-2010', endDate='30-JUN-2011')
-\end{Sinput}
-\begin{Soutput}
-[1] "Cached query file: C:/Dropbox/My Dropbox/Projects/irutils/inst/doc/GraduatesWithinRange.endDate.30-JUN-2011.startDate.01-JUL-2010.csv"
-\end{Soutput}
-\end{Schunk}
 
 \subsection{Creating Your Own Query}
 
@@ -178,49 +139,6 @@ To create your own query, simply place the SQL statement in its own text file en
 \label{fig:discoverer}
 \end{center}
 \end{figure}
-
-\textit{At Excelsior College, Oracle Discoverer is the most common approach to extracting data from SIS. Once a desired report is created using Discover, the SQL statement can be viewed using the "View" menu, then "SQL Inspector" (see Figure \ref{fig:discoverer}). Figure \ref{fig:sqlinspector} represents the resulting SQL Inspector view. Copy and paste the query (excluding the trailing semicolon) to a new text document and save it with an appropriate name. Parameters will need to be changed according to the rules described above. It is useful if a comment is placed at the top of the file describing the query and table names be changed from the numeric representation in the FROM claus to more meaningful names. It should also be noted that Oracle functions will not be automatically aliased. That is, the full function name will be used as the variable name. The final query (GraduatesWithinRange) represented in Figure \ref{fig:sqlinspector} is provided below.}
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics{SQLInspector}
-\caption{SQL Inspector}
-\label{fig:sqlinspector}
-\end{center}
-\end{figure}
-
-\begin{Schunk}
-\begin{Sinput}
-> query = getQuery('GraduatesWithinRange')
-> strwrap(query, width=80, exdent=5)
-\end{Sinput}
-\begin{Soutput}
- [1] "SELECT DISTINCT PROD.DISCOVERFUNCTIONS.ETHNICITY_CODES(contact.CONTACT_ID_SEQ)" 
- [2] "     ETHNICITY_CODES,"                                                          
- [3] "     PROD.SIS_CONTACT.ACTIVE_MILITARY_STUDENT(contact.CONTACT_ID_SEQ)"          
- [4] "     ACTIVE_MILITARY_STUDENT,"                                                  
- [5] "     PROD.DISCOVERFUNCTIONS.ENROLL_DATE(studentSvcItem.SVC_ITEM_ID_SEQ)"        
- [6] "     ENROLL_DATE,"                                                              
- [7] "     PROD.DISCOVERFUNCTIONS.ETHNICITY_SUMMARY(contact.CONTACT_ID_SEQ)"          
- [8] "     ETHNICITY_SUMMARY, TRUNC(("                                                
- [9] "     studentSvcStatus.START_DATE-contact.DATE_OF_BIRTH )/365)"                  
-[10] "     AGE_AT_GRADUATION, address.COUNTRY_CODE, address.STATE_CODE,"              
-[11] "     contact.DATE_OF_BIRTH, contact.GENDER, degreeRef.DIVISION_CODE,"           
-[12] "     studentSvcItem.SVC_ITEM_ID_SEQ, studentSvcItem.SVC_PROGRAM_CODE,"          
-[13] "     studentSvcItem.DEGREE_CODE, studentSvcItem.CONTACT_ID_SEQ,"                
-[14] "     studentSvcStatus.START_DATE, studentSvcStatus.STUDENT_STATUS_CODE FROM"    
-[15] "     PROD.ADDRESS address, PROD.CONTACT contact, PROD.DEGREE_REF degreeRef,"    
-[16] "     PROD.STUDENT_SVC_ITEM studentSvcItem, PROD.STUDENT_SVC_STATUS"             
-[17] "     studentSvcStatus WHERE ( ( contact.CONTACT_ID_SEQ = address.CONTACT_ID_SEQ"
-[18] "     ) AND ( contact.CONTACT_ID_SEQ = studentSvcItem.CONTACT_ID_SEQ ) AND ("    
-[19] "     degreeRef.DEGREE_CODE = studentSvcItem.DEGREE_CODE ) AND ("                
-[20] "     studentSvcItem.SVC_ITEM_ID_SEQ = studentSvcStatus.SVC_ITEM_ID_SEQ ) ) AND" 
-[21] "     ( address.ADDRESS_TYPE_CODE = 'P' ) AND ( studentSvcStatus.START_DATE <="  
-[22] "     ':endDate:' ) AND ( studentSvcStatus.START_DATE >= ':startDate:' ) AND ("  
-[23] "     studentSvcStatus.STUDENT_STATUS_CODE IN ('GR','CC') ) ORDER BY"            
-[24] "     studentSvcStatus.START_DATE ASC"                                           
-\end{Soutput}
-\end{Schunk}
 
 
 
@@ -266,6 +184,7 @@ To create your own query, simply place the SQL statement in its own text file en
 \end{figure}
 
 
+\section{Retention and Completion Rates}
 
 
 \clearpage

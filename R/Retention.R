@@ -1,9 +1,7 @@
-require(ggplot2)
-require(xtable)
-
 min.cell.size = 10
 
-#'
+#' Estimates cohort retention.
+#' 
 #' @export
 cohortRetention <- function(students, grads, gradColumn='START_DATE', grouping=NULL) {
     firstWHDate = min(students$CREATED_DATE, na.rm=TRUE)
@@ -44,8 +42,12 @@ cohortRetention <- function(students, grads, gradColumn='START_DATE', grouping=N
     #Remove the baseline data
     students = students[!is.na(students$CREATED_DATE),]
     #Remove the first and last cohort month
-    students = students[-which(students$CREATED_DATE == firstWHDate),]
-    students = students[-which(students$CREATED_DATE == lastWHDate),]
+    if(length(which(students$CREATED_DATE == firstWHDate)) > 0) {
+    	students = students[-which(students$CREATED_DATE == firstWHDate),]    	
+    }
+    if(length(which(students$CREATED_DATE == lastWHDate)) > 0) {
+	    students = students[-which(students$CREATED_DATE == lastWHDate),]
+    }
     if(nrow(students) < min.cell.size) {
         return(NULL)
     }
@@ -66,8 +68,14 @@ cohortRetention <- function(students, grads, gradColumn='START_DATE', grouping=N
     
     #Are those who are still enrolled persisting?
     students$Persisting = as.logical(NA)
-    students[which(students$Status %in% c('Still Enrolled', 'Transferred') & students$PERSIST_FLAG == 'Y'),]$Persisting = TRUE
-    students[which(students$Status %in% c('Still Enrolled', 'Transferred') & students$PERSIST_FLAG == 'N'),]$Persisting = FALSE
+	persistingYes = which(students$Status %in% c('Still Enrolled', 'Transferred') & students$PERSIST_FLAG == 'Y')
+	if(length(persistingYes) > 0) {
+		students[persistingYes,]$Persisting = TRUE
+	}
+	persistingNo = which(students$Status %in% c('Still Enrolled', 'Transferred') & students$PERSIST_FLAG == 'N')
+	if(length(persistingNo) > 0) {
+		students[persistingNo,]$Persisting = FALSE
+	}
     
     students$Month = as.factor(format(students$CREATED_DATE, format='%Y-%m'))
     
@@ -134,7 +142,8 @@ cohortRetention <- function(students, grads, gradColumn='START_DATE', grouping=N
 }
 
 
-#'
+#' Estimates retention.
+#' 
 #' @export
 retention <- function(students, grads, ...) {
     cohorts = unique(students[!is.na(students$CREATED_DATE),]$CREATED_DATE)
@@ -179,9 +188,105 @@ retention <- function(students, grads, ...) {
     return(long2)
 }
 
+#' Aggregates to quarters (i.e. three-months).
+#' 
+#' @export
+quarterlySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstMonth=7) {
+	d = unlist(strsplit(as.character(ret$Cohort), '-'))
+	year  = as.numeric(d[seq(1,length(d),by=2)])
+	month = as.numeric(d[seq(2,length(d),by=2)])
+	fy = rep(NA, length(year))
+	fy[month < firstMonth] = year[month < firstMonth]
+	fy[month >= firstMonth] = year[month >= firstMonth] + 1
+	quarter = rep(NA, length(year))
+	quarter[month %in% 7:9] = 'Q1'
+	quarter[month %in% 10:12] = 'Q2'
+	quarter[month %in% 1:3] = 'Q3'
+	quarter[month %in% 4:6] = 'Q4'
+	ret$fy = fy
+	ret$quarter = quarter
+	ret$fyq = paste('FY', ret$fy, '-', ret$quarter, sep='')
+	
+	t = ret[rows,]
+	t$weighted = t[,rateCol] * t$Enrollments
+ 	bylist = list(t$fyq)
+ 	if(!is.null(grouping)) {
+ 		bylist[[2]] = t[,grouping]
+ 	}
+	t1 = aggregate(t$weighted, by=bylist, sum)
+	t2 = aggregate(t$Enrollments, by=bylist, sum)
+	tab = cbind(t1[,1:(ncol(t1)-1)], t1$x / t2$x, t2$x)
 
+	#Check only the most recent aggregated cohort. Previos years that may not
+	#have enough cohorts will show up once at least one month into the next year
+	t3 = aggregate(t$Cohort, by=bylist, length) #This data frame will check that we have at least 3 months in the cohort
+	if(ncol(t3) == 3) {
+		for(g in unique(t3[,2])) {
+			f = max(t3[which(t3[,2] == g),1])
+			r = which(t3[,1] == f & t3[,2] == g & t3[,'x'] != 3)
+			if(length(r) > 0) {
+				tab = tab[-r,]
+				t3 = t3[-r,]
+			}			
+		}
+	} else if(ncol(t3) == 2) {
+		f = max(t3[,1])
+		r = which(t3[,1] == f & t3[,'x'] != 3)
+		if(length(r) > 0) {
+			tab = tab[-r,]
+			t3 = t3[-r,]
+		}
+	} else {
+		stop('Retention only supports up to one grouping variable.')
+	}
+	
+	names(tab)[1] = 'FY'
+ 	names(tab)[(ncol(tab)-1):ncol(tab)] = c(rateCol, 'n')
+ 	if(!is.null(grouping)) {
+ 		names(tab)[2] = grouping
+ 	}
+	#tab = cast(tab, FY ~ Level, value='CompletionRate')
+	#tab = cbind(tab, cast(t2, Group.1 ~ Group.2, value='x')[,2:4])
+	#names(tab)[5:7] = paste(names(tab)[5:7], 'n', sep='.')
+ 	tab = as.data.frame(tab)
+ 	return(tab)
+}
 
-#'
+#' Prints LaTeX of a quarterly aggregate.
+#' 
+#' @export
+quarterSummaryLaTeX <- function(quartersum, caption=NULL, label='quartersum', numQuarters=8) {
+	#quartersum[is.nan(quartersum[,3]),3] = NA
+	fyc = cast(quartersum, Group ~ FY, value=names(quartersum)[3])
+	fyn = cast(quartersum, Group ~ FY, value=names(quartersum)[4])
+	quartersum = data.frame(Group=fyc[,1])
+	for(i in 2:ncol(fyn)) {
+		fyc[which(fyn[,i] < 5),i] = NA
+	 	quartersum = cbind(quartersum, fyc[,i], fyn[,i])
+	 	names(quartersum)[ncol(quartersum)-1] = names(fyn)[i]
+	 	names(quartersum)[ncol(quartersum)] = paste(names(fyn)[i], 'n', sep='.')
+	}
+	for(i in seq(3, ncol(quartersum), by=2)) {
+		quartersum[!is.na(quartersum[,i]),i] = paste('(', quartersum[!is.na(quartersum[,i]),i], ')', sep='')
+	}
+	#quartersum[,1] = as.integer(quartersum[,1])
+	quartersum = quartersum[,c(1, ((ncol(quartersum))-(2*numQuarters)+1):ncol(quartersum))]
+	
+	addtorow <- list()
+	addtorow$pos <- list()
+	addtorow$pos[[1]] <- c(-1)
+	addtorow$command <- c("\\hline ")
+	for(i in seq(2, ncol(quartersum), by=2)) {
+		addtorow$command[1] = paste(addtorow$command[1], ' & \\multicolumn{2}{c}{', names(quartersum[i]), '}', sep='')
+	}
+	addtorow$command[1] = paste(addtorow$command[1], ' \\\\ \\hline', sep='')
+	align = c('l', 'l', rep(c('r@{}', '>{ \\tiny}l'), (ncol(quartersum) - 1) / 2) )
+	x = xtable(quartersum, caption=caption, label=label, align=align)
+	print(x, table.placement='h!', include.rownames=FALSE, include.colnames=FALSE, add.to.row=addtorow, hline.after=c(nrow(x)), size='smaller')
+}
+
+#' Aggregates to fiscal years.
+#' 
 #' @export
 fySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstMonth=7) {
 	d = unlist(strsplit(as.character(ret$Cohort), '-'))
@@ -201,7 +306,31 @@ fySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstM
 	t1 = aggregate(t$weighted, by=bylist, sum)
 	t2 = aggregate(t$Enrollments, by=bylist, sum)
 	tab = cbind(t1[,1:(ncol(t1)-1)], t1$x / t2$x, t2$x)
- 	names(tab)[1] = 'FY'
+	
+	#Check only the most recent aggregated cohort. Previos years that may not
+	#have enough cohorts will show up once at least one month into the next year
+	t3 = aggregate(t$Cohort, by=bylist, length) #This data frame will check that we have at least 3 months in the cohort
+	if(ncol(t3) == 3) {
+		for(g in unique(t3[,2])) {
+			f = max(t3[which(t3[,2] == g),1])
+			r = which(t3[,1] == f & t3[,2] == g & t3[,'x'] != 12)
+			if(length(r) > 0) {
+				tab = tab[-r,]
+				t3 = t3[-r,]
+			}			
+		}
+	} else if(ncol(t3) == 2) {
+		f = max(t3[,1])
+		r = which(t3[,1] == f & t3[,'x'] != 12)
+		if(length(r) > 0) {
+			tab = tab[-r,]
+			t3 = t3[-r,]
+		}
+	} else {
+		stop('Retention only supports up to one grouping variable.')
+	}
+ 	
+	names(tab)[1] = 'FY'
  	names(tab)[(ncol(tab)-1):ncol(tab)] = c(rateCol, 'n')
  	if(!is.null(grouping)) {
  		names(tab)[2] = grouping
@@ -213,7 +342,8 @@ fySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstM
  	return(tab)
 }
 
-#'
+#' Prints LaTeX of fiscal year summary.
+#' 
 #' @export
 fySummaryLaTeX <- function(fysum, caption=NULL, label='fysum') {
 	fysum[is.nan(fysum[,3]),3] = NA
@@ -245,7 +375,8 @@ fySummaryLaTeX <- function(fysum, caption=NULL, label='fysum') {
 }
 
 
-#'
+#' Returns cohort summary.
+#' 
 #' @export
 cohortSummary <- function(dr, grouping='Group') {
     month15 = dr[which(dr$Month == 15),]
@@ -262,7 +393,8 @@ cohortSummary <- function(dr, grouping='Group') {
     return(s)
 }
 
-#'
+#' Prints LaTeX of cohort summary.
+#' 
 #' @export
 cohortSummaryLaTeX <- function(ret, category='Category', category.align="l", 
         caption='Retention Summary', label='retentionSummary', 
@@ -338,7 +470,8 @@ cohortSummaryLaTeX <- function(ret, category='Category', category.align="l",
     return(p)
 }
 
-#'
+#' Prints LaTeX of retention summary.
+#' 
 #' @export
 retentionSummaryLaTeX <- function(ret, category='Category', category.align="l", caption='Retention Summary', label='retentionSummary') {
     retsum = retentionSummary(ret)
@@ -358,7 +491,8 @@ retentionSummaryLaTeX <- function(ret, category='Category', category.align="l", 
     print(x, table.placement='h!',include.rownames=FALSE, include.colnames=FALSE, add.to.row=addtorow, hline.after=c(nrow(x)), size='smaller')
 }
 
-#'
+#' Returns retention summary.
+#' 
 #' @export
 retentionSummary <- function(dr, grouping='Group') {
     month15 = dr[which(dr$Month == 15),]
@@ -410,9 +544,3 @@ retentionSummary <- function(dr, grouping='Group') {
 	names(tab) = c('Category', 'Retention', 'n', '36-Months', 'n', '48-Months', 'n', '72-Months', 'n', '96-Months', 'n')
     return(tab)
 }
-
-# require(compiler)
-# cohortRetention <- cmpfun(cohortRetention)
-# retention <- cmpfun(retention)
-# retentionSummary <- cmpfun(retentionSummary)
-# retentionSummaryLaTeX <- cmpfun(retentionSummaryLaTeX)

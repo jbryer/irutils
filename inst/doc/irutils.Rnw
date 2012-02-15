@@ -148,6 +148,7 @@ print(p)
 \end{figure}
 
 
+\section{Retention and Completion Rates}
 
 
 \clearpage

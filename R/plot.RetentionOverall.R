@@ -1,3 +1,5 @@
+#'
+#' @export
 plotRetentionOverall <- function(students, grads, summary=NULL, retentionMonths=c(15), 
 								 completionMonths=c(36, 48, 72, 96), legend.position='none'
 								 ) {

@@ -1,3 +1,5 @@
+#'
+#' @export
 plotRetention <- function(students, grads, summary=NULL, retentionMonths=c(15), completionMonths=c(36, 48, 72, 96)) {
 	if(is.null(summary)) {
 		long2 = retention(students, grads)

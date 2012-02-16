@@ -1,3 +1,5 @@
+#'
+#' @export
 plotPersistence <- function(students, grads, summary=NULL) {
 	if(is.null(summary)) {
 		long2 = retention(students, grads)

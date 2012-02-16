@@ -1,3 +1,5 @@
+#'
+#' @export
 plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3, 
 								reverse=TRUE, title="Cohort Based Retention", xlab='Monthly Cohort', 
 								ylab1='Percentage', ylab2='Cohort Size', legend.position=c(.1,.7), 

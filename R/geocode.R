@@ -37,15 +37,15 @@ geolite.delete <- function() {
 #' Load the Geolite database.
 #' @export
 geolite.load <- function() {
-	if(length(names(geolite.location)) == 0 || length(names(geolite.blocks)) == 0) {
+	if(length(names(irutils:::geolite.location)) == 0 || length(names(irutils:::geolite.blocks)) == 0) {
 		print("Loading GeoLiteCity database files. This may take a while, please be patient...")
 		flush.console()
 		data.dir = paste(system.file(package="geocode"), "/data/", sep="")
 		data.dir = paste(data.dir, "GeoLiteCity_", geolite.version()$version[1], "/", sep="")
-		geolite.location <<- read.csv(paste(data.dir, "GeoLiteCity-Location.csv", sep=""), skip=1, header=TRUE)
+		irutils:::geolite.location <- read.csv(paste(data.dir, "GeoLiteCity-Location.csv", sep=""), skip=1, header=TRUE)
 		print("Locations loaded...")
 		flush.console()
-		geolite.blocks <<- read.csv(paste(data.dir, "GeoLiteCity-Blocks.csv", sep=""), skip=1, header=TRUE)
+		irutils:::geolite.blocks <- read.csv(paste(data.dir, "GeoLiteCity-Blocks.csv", sep=""), skip=1, header=TRUE)
 		print("Blocks loaded...")
 	}
 }
@@ -74,11 +74,11 @@ geocode.ips <- function(ips) {
 	for(ip in ips) {
 		parts = unlist(strsplit(ip, "\\."))
 		ipnum = 16777216*as.numeric(parts[1]) + 65536*as.numeric(parts[2]) + 256*as.numeric(parts[3]) + as.numeric(parts[4])
-		group1 = geolite.blocks[which(geolite.blocks$startIpNum < ipnum),]
+		group1 = irutils:::.blocks[which(irutils:::geolite.blocks$startIpNum < ipnum),]
 		group2 = group1[which(group1$endIpNum > ipnum),]
 		if(nrow(group2) > 0) {
 			ans = rbind(ans, 
-					cbind(ip=ip, geolite.location[which(geolite.location$locId == group2[1,]$locId),])
+					cbind(ip=ip, irutils:::geolite.location[which(irutils:::geolite.location$locId == group2[1,]$locId),])
 			)
 		} else {
 			ans = rbind(ans, data.frame(ip=ip, locId=NA, country=NA, region=NA, city=NA, postalCode=NA, latitude=NA, longitude=NA, metroCode=NA, areaCode=NA))

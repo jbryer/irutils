@@ -2,17 +2,14 @@
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 getSQLRepos <- function() {
-	if(is.null(sqlrepos)) {
-		sqlrepos <<- paste(system.file(package='irutils'), '/data', sep='')
-	}
-	return(sqlrepos)
+	return(irutils:::sqlrepos)
 }
 
 #' Sets the current directory containing SQL files.
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 setSQLRepos <- function(repos) {
-	sqlrepos <<- repos
+	assignInNamespace("sqlrepos", repos, "irutils")
 }
 
 #' Returns a list of available queries in the current repository.

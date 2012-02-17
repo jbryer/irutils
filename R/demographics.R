@@ -1,5 +1,4 @@
-#' 
-#' @export
+
 demographics <- function(df, useNA='ifany') {
 	results = data.frame(Category=character(), Frequency=numeric(), Percentage=numeric())
 	
@@ -20,8 +19,7 @@ demographics <- function(df, useNA='ifany') {
 	return(results)
 }
 
-#'
-#' @export
+
 xtable.demographics <- function(x, caption = NULL, label = NULL, align = NULL,
 								digits = NULL, display = NULL, ...) {
 	cat('using xtable...')

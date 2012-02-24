@@ -59,7 +59,7 @@ likert <- function(items, grouping=NULL, nlevels=length(levels(items[,1]))) {
 		results = melt(results, id.vars='item')
 	}
 	
-	r = list(results=results, items=items, grouping=grouping, nlevels=nlevels)
+	r = list(results=results, items=items, grouping=grouping, nlevels=nlevels, results2=results2)
 	class(r) = 'likert'
 	return(r)
 }
@@ -116,8 +116,8 @@ plot.likert.bar <- function(likert, low.color='blue', high.color='red',
 					breaks=unique(likert$results$Response),
 					labels=levels(likert$items[,i])) + 
 			geom_bar(stat='identity', aes(fill=Response)) + 
-			#geom_text(data=results2, aes(x=Group, y=0, label=paste(round(low), '%', sep=''), group=Item), size=text.size, hjust=1) +
-			#geom_text(data=results2, aes(x=Group, y=100, label=paste(round(high), '%', sep=''), group=Item), size=text.size, hjust=-.2) +
+			geom_text(data=likert$results2, aes(x=Group, y=0, label=paste(round(low), '%', sep=''), group=Item), size=text.size, hjust=1) +
+			geom_text(data=likert$results2, aes(x=Group, y=100, label=paste(round(high), '%', sep=''), group=Item), size=text.size, hjust=-.2) +
 			coord_flip() +
 			ylab('Percentage') + xlab('') + ylim(c(-5,105)) +
 			opts(axis.ticks=theme_blank()) +
@@ -128,8 +128,8 @@ plot.likert.bar <- function(likert, low.color='blue', high.color='red',
 					breaks=unique(likert$results$variable), 
 					labels=levels(likert$items[,i])) + 
 			geom_bar(stat='identity', aes(fill=variable)) + 
-			#geom_text(data=results2, aes(x=item, y=0, label=paste(round(low), '%', sep='')), size=text.size, hjust=1) +
-			#geom_text(data=results2, aes(x=item, y=100, label=paste(round(high), '%', sep='')), size=text.size, hjust=-.2) +
+			geom_text(data=likert$results2, aes(x=item, y=0, label=paste(round(low), '%', sep='')), size=text.size, hjust=1) +
+			geom_text(data=likert$results2, aes(x=item, y=100, label=paste(round(high), '%', sep='')), size=text.size, hjust=-.2) +
 			coord_flip() +
 			ylab('Percentage') + xlab('') + ylim(c(-5,105)) +
 			opts(axis.ticks=theme_blank())

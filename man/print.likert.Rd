@@ -1,10 +1,13 @@
 \name{print.likert}
 \alias{print.likert}
-\title{Prints summary table.}
+\title{Prints results table.}
 \usage{
-  print.likert(likert, ...)
+  print.likert(x, ...)
+}
+\arguments{
+  \item{x}{the likert class to print.}
 }
 \description{
-  Prints summary table.
+  Prints results table.
 }
 

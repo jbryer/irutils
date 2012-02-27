@@ -1,10 +1,10 @@
-\name{plot.likert.heat}
-\alias{plot.likert.heat}
+\name{plot.likert.bar}
+\alias{plot.likert.bar}
 \title{Internal method.}
 \usage{
-  plot.likert.heat(likert, low.color = "blue",
+  plot.likert.bar(likert, low.color = "blue",
     high.color = "red", neutral.color = "white",
-    text.colour = "white", text.size = 2, ...)
+    text.size = 2, ...)
 }
 \description{
   Internal method.

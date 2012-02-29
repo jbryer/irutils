@@ -2,7 +2,7 @@
 \alias{summary.likert}
 \title{Prints summary table.}
 \usage{
-  summary.likert(x, ...)
+  \method{summary}{likert} (x, ...)
 }
 \arguments{
   \item{x}{the likert class to summarize.}

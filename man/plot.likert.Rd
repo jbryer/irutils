@@ -2,7 +2,7 @@
 \alias{plot.likert}
 \title{Plots a set of likert items.}
 \usage{
-  plot.likert(likert, low.color = "blue",
+  \method{plot}{likert} (likert, low.color = "blue",
     high.color = "red", neutral.color = "white",
     text.colour = "white", text.size = 2,
     type = c("bar", "heat"), ...)

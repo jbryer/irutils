@@ -2,7 +2,7 @@
 \alias{print.likert}
 \title{Prints results table.}
 \usage{
-  print.likert(x, ...)
+  \method{print}{likert} (x, ...)
 }
 \arguments{
   \item{x}{the likert class to print.}

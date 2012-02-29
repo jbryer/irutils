@@ -108,7 +108,8 @@ likert <- function(items, grouping=NULL, nlevels=length(levels(items[,1]))) {
 #'
 #' @param x the likert class to print.
 #' @export
-#' @S3method plot x
+#' @method print likert
+#' @S3method print likert
 print.likert <- function(x, ...) {
 	return(x$results)
 }
@@ -117,7 +118,8 @@ print.likert <- function(x, ...) {
 #'
 #' @param x the likert class to summarize.
 #' @export
-#' #S3method summary x
+#' @method summary likert
+#' @S3method summary likert
 summary.likert <- function(x, ...) {
 	return(x$summary)
 }
@@ -132,6 +134,7 @@ summary.likert <- function(x, ...) {
 #' @param text.size size or text labels
 #' @param type whether to plot a bar or heat map graphic
 #' @export
+#' @method plot likert
 #' @S3method plot likert
 plot.likert <- function(likert, low.color='blue', high.color='red', 
 			neutral.color='white', text.colour='white', text.size=2, 

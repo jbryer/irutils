@@ -44,7 +44,8 @@ execQuery <- function(query=NULL, connection=NULL, ...) {
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 getQuery <- function(query=NULL, ...) {
-	sql = scan(paste(getSQLRepos(), "/", query, ".sql", sep=''), what="character", sep=';', multi.line=FALSE, comment.char=c("#"), quiet=TRUE, quote=NULL)
+	sql = scan(paste(getSQLRepos(), "/", query, ".sql", sep=''), what="character", 
+			   sep=';', multi.line=FALSE, comment.char=c("#"), quiet=TRUE, quote=NULL)
 	sql = paste(sql, collapse=" ")
  	parmvals = unlist(list(...))
  	if(length(parmvals)>0) {
@@ -60,7 +61,8 @@ getQuery <- function(query=NULL, ...) {
 #' @export
 getQueryDesc <- function(query=NULL, ...) {
 	desc = ''
-	sql = scan(paste(getSQLRepos(), "/", query, ".sql", sep=''), what="character", sep=';', multi.line=FALSE, comment.char=c(""), quiet=TRUE, quote=NULL)
+	sql = scan(paste(getSQLRepos(), "/", query, ".sql", sep=''), what="character", 
+			   sep=';', multi.line=FALSE, comment.char=c(""), quiet=TRUE, quote=NULL)
  	for(i in 1:length(sql)) {
  		tmp = strsplit(sql[i], '#')
    		if(length(tmp[[1]]) > 1) {

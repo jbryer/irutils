@@ -26,6 +26,13 @@ for(i in 1:ncol(items28)) {
 						 labels=c('Strongly disagree', 'Disagree', 'Agree', 'Strongly Agree'), ordered=TRUE)
 }
 
+l28 = likert(items28)
+print(l28)
+plot(l28)
+plot(l28, type='heat')
+
+l28g = likert(item28, grouping = pisa$CNT)
+
 plotBarchartTable(items28, low.color='maroon', high.color='burlywood4')
 plotBarchartTable(items28, grouping=pisa$CNT, low.color='maroon', high.color='burlywood4')
 plotHeatmapTable(items28)

@@ -21,7 +21,10 @@ ls('package:irutils')
 
 #Load included data
 data(pisana)
+data(students)
 
+#Resave rda files to make them smaller
+tools:::resaveRdaFiles('irutils/data')
 
 #Setup the SQLite database
 data(surveys)

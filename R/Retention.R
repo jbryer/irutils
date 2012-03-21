@@ -1,3 +1,5 @@
+min.cell.size = 5
+
 #' Estimates cohort retention.
 #' 
 #' @export

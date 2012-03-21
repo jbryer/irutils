@@ -75,19 +75,20 @@ getQueryDesc <- function(query=NULL, ...) {
 #' This will first look in the given directory for a CSV version of the file, if
 #' it exists, that will be read and returned. Otherwise it will execute the query
 #' and then saves a CSV file.
-#' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
-cacheQuery <- function(query=NULL, dir=getwd(), ...) {
+cacheQuery <- function(query=NULL, dir=getwd(), filename=NULL, ...) {
 	parms = getParameters(query)
  	parmvals = unlist(list(...))
-	filename = paste(dir, '/', query, sep='')
-	if(length(parms) > 0) {
-	 	for(i in 1:length(parms)) {
-	 		filename = paste(filename, parms[i], parmvals[parms[i]], sep='.')
-	 	}
+	if(is.null(filename)) {
+		filename = paste(dir, '/', query, sep='')
+		if(length(parms) > 0) {
+		 	for(i in 1:length(parms)) {
+		 		filename = paste(filename, parms[i], parmvals[parms[i]], sep='.')
+		 	}
+		}
+	 	filename = paste(filename, 'csv', sep='.')
 	}
- 	filename = paste(filename, 'csv', sep='.')
- 	print(paste("Cached query file:", filename))
+ 	message(paste("Cached query file:", filename))
 	if(file.exists(filename)) {
 		df = read.csv(filename)
 	} else {

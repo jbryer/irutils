@@ -30,3 +30,5 @@ Collate:
     'plot.Persistence.R'
     'plot.Retention.R'
     'plot.RetentionOverall.R'
+    'retention.latex.R'
+    'retention.summary.R'

@@ -2,7 +2,7 @@
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 getAge <- function (dateCol, calcDate) {
-    as.numeric((as.Date(calcDate) - dateCol)/365)
+    as.numeric((as.Date(calcDate) - dateCol)/365.25)
 }
 
 #' Returns a factor variable using the given breaks and labels. Will calculate the

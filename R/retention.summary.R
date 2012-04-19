@@ -150,6 +150,8 @@ retentionSummary <- function(dr, grouping='Group') {
 	
 	ret15 = aggregate(month15[,c('RetentionRate')], by=list(month15[,grouping]), FUN=mean)
 	ret15.n = aggregate(month15[,c('Enrollments')], by=list(month15[,grouping]), FUN=sum)
+	names(ret15) = c('Category', 'Retention')
+	names(ret15.n) = c('Category', 'n')
 	
 	month36 = dr[which(dr$Month == 36),]
 	month36[is.na(month36$RetentionRate) & month36$Enrollments == 0,'RetentionRate'] = 0
@@ -157,6 +159,8 @@ retentionSummary <- function(dr, grouping='Group') {
 	month36[is.na(month36$PersistenceRate) & month36$Enrollments == 0,'PersistenceRate'] = 0
 	com36 = aggregate(month36[,c('GraduationRate')], by=list(month36[,grouping]), FUN=mean)
 	com36.n = aggregate(month36[,c('Enrollments')], by=list(month36[,grouping]), FUN=sum)
+	names(com36) = c('Category', '36-Months')
+	names(com36.n) = c('Category', 'n')
 	
 	month48 = dr[which(dr$Month == 48),]
 	month48[is.na(month48$RetentionRate) & month48$Enrollments == 0,'RetentionRate'] = 0
@@ -164,6 +168,8 @@ retentionSummary <- function(dr, grouping='Group') {
 	month48[is.na(month48$PersistenceRate) & month48$Enrollments == 0,'PersistenceRate'] = 0
 	com48 = aggregate(month48[,c('GraduationRate')], by=list(month48[,grouping]), FUN=mean)
 	com48.n = aggregate(month48[,c('Enrollments')], by=list(month48[,grouping]), FUN=sum)
+	names(com48) = c('Category', '48-Months')
+	names(com48.n) = c('Category', 'n')
 	
 	month72 = dr[which(dr$Month == 72),]
 	month72[is.na(month72$RetentionRate) & month72$Enrollments == 0,'RetentionRate'] = 0
@@ -171,6 +177,8 @@ retentionSummary <- function(dr, grouping='Group') {
 	month72[is.na(month72$PersistenceRate) & month72$Enrollments == 0,'PersistenceRate'] = 0
 	com72 = aggregate(month72[,c('GraduationRate')], by=list(month72[,grouping]), FUN=mean)
 	com72.n = aggregate(month72[,c('Enrollments')], by=list(month72[,grouping]), FUN=sum)
+	names(com72) = c('Category', '72-Months')
+	names(com72.n) = c('Category', 'n')
 	
 	month96 = dr[which(dr$Month == 96),]
 	month96[is.na(month96$RetentionRate) & month96$Enrollments == 0,'RetentionRate'] = 0
@@ -178,17 +186,18 @@ retentionSummary <- function(dr, grouping='Group') {
 	month96[is.na(month96$PersistenceRate) & month96$Enrollments == 0,'PersistenceRate'] = 0
 	com96 = aggregate(month96[,c('GraduationRate')], by=list(month96[,grouping]), FUN=mean)
 	com96.n = aggregate(month96[,c('Enrollments')], by=list(month96[,grouping]), FUN=sum)
+	names(com96) = c('Category', '96-Months')
+	names(com96.n) = c('Category', 'n')
 	
-	tab = merge(ret15, ret15.n, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com36, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com36.n, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com48, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com48.n, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com72, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com72.n, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com96, by='Group.1', all.x=TRUE)
-	tab = merge(tab, com96.n, by='Group.1', all.x=TRUE)
+	tab = merge(ret15, ret15.n, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com36, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com36.n, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com48, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com48.n, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com72, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com72.n, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com96, by='Category', all.x=TRUE, suffixes=c('',''))
+	tab = merge(tab, com96.n, by='Category', all.x=TRUE, suffixes=c('',''))
 	
-	names(tab) = c('Category', 'Retention', 'n', '36-Months', 'n', '48-Months', 'n', '72-Months', 'n', '96-Months', 'n')
 	return(tab)
 }

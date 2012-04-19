@@ -5,13 +5,13 @@ cohortSummary <- function(dr, grouping='Group') {
 	month15 = dr[which(dr$Month == 15),]
 	s = month15[!duplicated(month15[,grouping]), c(grouping, 'RetentionRate', 'Enrollments')]
 	month36 = dr[which(dr$Month == 36),]
-	s = merge(s, month36[!duplicated(month36[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE)
+	s = merge(s, month36[!duplicated(month36[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE, suffixes=c('',''))
 	month48 = dr[which(dr$Month == 48),]
-	s = merge(s, month48[!duplicated(month48[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE)
+	s = merge(s, month48[!duplicated(month48[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE, suffixes=c('',''))
 	month72 = dr[which(dr$Month == 72),]
-	s = merge(s, month72[!duplicated(month72[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE)
+	s = merge(s, month72[!duplicated(month72[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE, suffixes=c('',''))
 	month96 = dr[which(dr$Month == 96),]
-	s = merge(s, month96[!duplicated(month96[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE)
+	s = merge(s, month96[!duplicated(month96[,grouping]), c(grouping, 'GraduationRate', 'Enrollments')], by=grouping, all.x=TRUE, suffixes=c('',''))
 	names(s) = c('Category', 'Retention', 'n', '36-Months', 'n', '48-Months', 'n', '72-Months', 'n', '96-Months', 'n')
 	return(s)
 }

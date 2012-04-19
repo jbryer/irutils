@@ -19,7 +19,6 @@ Collate:
     'Retention.R'
     'saveIPEDStoDB.R'
     'LocalRepos.R'
-    'geocode.R'
     'xtable.R'
     'adjustedTableLaTeX.R'
     'demographics.R'

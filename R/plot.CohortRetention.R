@@ -48,7 +48,7 @@ plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3,
 			)
 		rlabel$x=as.character(rlabel$x)
 		plot1 = plot1 + geom_vline(data=rlabel, xintercept=which(xaxis %in% rlabel$x), colour='black', size=1, alpha=.3) 
-		plot1 = plot1 +	geom_text(data=rlabel, aes(x=which(xaxis %in% rlabel$x), y=100, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
+		plot1 = plot1 +	geom_text(data=rlabel, x=which(xaxis %in% rlabel$x, y=100, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
 	}
 	if(!is.null(completionMonths)) {
 		clabel <- data.frame(
@@ -58,7 +58,7 @@ plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3,
 			)
 		clabel$x = as.character(clabel$x)
 		plot1 = plot1 + geom_vline(data=clabel, xintercept=which(xaxis %in% clabel$x), colour='black', size=1, alpha=.3)
-		plot1 = plot1 + geom_text(data=clabel, aes(x=which(xaxis %in% clabel$x), y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
+		plot1 = plot1 + geom_text(data=clabel, x=which(xaxis %in% clabel$x, y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
 	}
 	
 	#Top part of the graph (histogram of new enrollments)

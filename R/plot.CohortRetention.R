@@ -22,18 +22,23 @@ plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3,
 	#xint <- t[(nrow(t)-15),]$Cohort #TODO: This won't plot unless the variable is in the global environment
 	
 	#Bottom part of the plot
-	plot1 = ggplot(t, aes(x=Cohort, y=value, stat='identity')) + geom_bar(aes(fill=variable), alpha=.5) + 
+	plot1 = ggplot(t, aes(x=Cohort, y=value), stat='identity') + geom_bar(aes(fill=variable), alpha=.5) + 
 		opts(axis.text.x=theme_text(angle=-90, size=unit(8,'points'), hjust=0)) + xlab(xlab) + ylab(ylab1) + 
 		scale_fill_manual(paste('Status as of', lastWHDate), values=c('Withdrawn'='pink', 'Transferred'='lightgreen', 'Still Enrolled'='green', 'Graduated Other'='lightblue', 'Graduated'='blue')) + 
 		opts(legend.key.width=unit(.2,"cm"), legend.text=theme_text(size=8), legend.title=theme_text(size=9,hjust=0), legend.position=legend.position, legend.justification=legend.justification, legend.background=theme_rect(colour='white', fill='white')) +
-		geom_path(data=df, aes(x=Cohort, y=GraduationRate, fill=NULL, label=NULL, group=1), colour='blue', stat='identity') + 
-		geom_path(data=df, aes(x=Cohort, y=RetentionRate, fill=NULL, label=NULL, group=1), colour='black', stat='identity')
+		geom_path(data=df, aes(x=Cohort, y=GraduationRate, group=1), fill=NULL, label=NULL, colour='blue', stat='identity') + 
+		geom_path(data=df, aes(x=Cohort, y=RetentionRate, group=1), fill=NULL, label=NULL, colour='black', stat='identity')
 	if(labelPoints) {
 		plot1 = plot1 + geom_text(data=df, aes(x=Cohort, y=GraduationRate, label=round(GraduationRate, digits=0)), hjust=.5, vjust=-1, colour='blue', size=textsize) +
 			geom_text(data=df, aes(x=Cohort, y=RetentionRate, label=round(RetentionRate, digits=0)), hjust=.5, vjust=2, colour='black', size=textsize)
 	}
 	
-	if(reverse) { plot1 = plot1 + xlim(rev(levels(t$Cohort))) }
+	xaxis = levels(t$Cohort)
+	
+	if(reverse) { 
+		xaxis = rev(levels(t$Cohort))
+		plot1 = plot1 + xlim(rev(levels(t$Cohort)))
+	}
 	
 	if(!is.null(retentionMonths)) {
 		rlabel <- data.frame(
@@ -41,8 +46,9 @@ plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3,
 			y=rep(100, length(retentionMonths)),
 			label=paste(retentionMonths, '-month retention rate: ', format(df[(nrow(df)-retentionMonths),'RetentionRate'], digits=3), '%', sep='')
 			)
-		plot1 = plot1 + geom_vline(data=rlabel, aes(xintercept=x), colour='black', size=1, alpha=.3) +
-			geom_text(data=rlabel, aes(x=x, y=100, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
+		rlabel$x=as.character(rlabel$x)
+		plot1 = plot1 + geom_vline(data=rlabel, xintercept=which(xaxis %in% rlabel$x), colour='black', size=1, alpha=.3) 
+		plot1 = plot1 +	geom_text(data=rlabel, aes(x=which(xaxis %in% rlabel$x), y=100, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
 	}
 	if(!is.null(completionMonths)) {
 		clabel <- data.frame(
@@ -50,8 +56,9 @@ plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3,
 			y=rep(100, length(completionMonths)),
 			label=paste(completionMonths, '-month completion rate: ', format(df[(nrow(df)-completionMonths),'GraduationRate'], digits=3), '%', sep='')
 			)
-		plot1 = plot1 + geom_vline(data=clabel, aes(xintercept=x), colour='black', size=1, alpha=.3) +
-			geom_text(data=clabel, aes(x=x, y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
+		clabel$x = as.character(clabel$x)
+		plot1 = plot1 + geom_vline(data=clabel, xintercept=which(xaxis %in% clabel$x), colour='black', size=1, alpha=.3)
+		plot1 = plot1 + geom_text(data=clabel, aes(x=which(xaxis %in% clabel$x), y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
 	}
 	
 	#Top part of the graph (histogram of new enrollments)

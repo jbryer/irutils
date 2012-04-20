@@ -31,3 +31,4 @@ Collate:
     'plot.RetentionOverall.R'
     'retention.latex.R'
     'retention.summary.R'
+    'lsos.R'

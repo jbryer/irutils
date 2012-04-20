@@ -44,20 +44,20 @@ plotCohortRetention <- function(students, grads, labelPoints=FALSE, textsize=3,
 		rlabel <- data.frame(
 			x=df[(nrow(df)-retentionMonths),'Cohort'],
 			y=rep(100, length(retentionMonths)),
-			label=paste(retentionMonths, '-month retention rate: ', format(df[(nrow(df)-retentionMonths),'RetentionRate'], digits=3), '%', sep=''),
-			position=which(xaxis %in% rlabel$x)
+			label=paste(retentionMonths, '-month retention rate: ', format(df[(nrow(df)-retentionMonths),'RetentionRate'], digits=3), '%', sep='')
 			)
+		rlabel$position=which(xaxis %in% rlabel$x)
 		rlabel$x=as.character(rlabel$x)
 		plot1 = plot1 + geom_vline(data=rlabel, aes(xintercept=position), colour='black', size=1, alpha=.3) 
-		plot1 = plot1 +	geom_text(data=rlabel, aes(x=position, y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
+		plot1 = plot1 + geom_text(data=rlabel, aes(x=position, y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)
 	}
 	if(!is.null(completionMonths)) {
 		clabel <- data.frame(
 			x=df[(nrow(df)-completionMonths),'Cohort'],
 			y=rep(100, length(completionMonths)),
-			label=paste(completionMonths, '-month completion rate: ', format(df[(nrow(df)-completionMonths),'GraduationRate'], digits=3), '%', sep=''),
-			position=which(xaxis %in% clabel$x)
+			label=paste(completionMonths, '-month completion rate: ', format(df[(nrow(df)-completionMonths),'GraduationRate'], digits=3), '%', sep='')
 			)
+		clabel$position=which(xaxis %in% clabel$x)
 		clabel$x = as.character(clabel$x)
 		plot1 = plot1 + geom_vline(data=clabel, aes(xintercept=position), colour='black', size=1, alpha=.3)
 		plot1 = plot1 + geom_text(data=clabel, aes(x=position, y=y, label=label), group=1, size=3, vjust=-.3, hjust=0, angle=-90)

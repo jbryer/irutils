@@ -11,7 +11,8 @@ LazyLoad: yes
 Depends:
     ggplot2,
     xtable,
-    psych
+    psych,
+    reshape
 Collate:
     'age.R'
     'dbaccess.R'

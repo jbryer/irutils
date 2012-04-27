@@ -20,6 +20,13 @@ cohortSummary <- function(dr, grouping='Group') {
 #' 
 #' @export
 fySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstMonth=7) {
+	for(i in c('GraduationRate','RetentionRate','PersistenceRate')) {
+		r = which(is.nan(ret[,i]) | is.na(ret[,i]))
+		if(length(rows) > 0) {
+			ret[r,i] = 0
+		}
+	}
+	
 	d = unlist(strsplit(as.character(ret$Cohort), '-'))
 	year  = as.numeric(d[seq(1,length(d),by=2)])
 	month = as.numeric(d[seq(2,length(d),by=2)])
@@ -77,6 +84,13 @@ fySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstM
 #' 
 #' @export
 quarterlySummary <- function(ret, rows, grouping=NULL, rateCol='GraduationRate', firstMonth=7) {
+	for(i in c('GraduationRate','RetentionRate','PersistenceRate')) {
+		r = which(is.nan(ret[,i]) | is.na(ret[,i]))
+		if(length(rows) > 0) {
+			ret[r,i] = 0
+		}
+	}
+
 	d = unlist(strsplit(as.character(ret$Cohort), '-'))
 	year  = as.numeric(d[seq(1,length(d),by=2)])
 	month = as.numeric(d[seq(2,length(d),by=2)])

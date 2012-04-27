@@ -18,16 +18,15 @@ for(i in 1:ncol(items28)) {
 						 ordered=TRUE)
 }
 
-l1 = likert(items28)
-print(l1)
-summary(l1)
-names(l1)
-plot(l1, low.color='maroon', high.color='burlywood4')
-plot(l1, type='heat', text.size=5, text.colour='white')
+l28 = likert(items28)
+summary(l28)
+
+plot(l28, low.color='maroon', high.color='burlywood4')
+plot(l28, type='heat', text.size=5)
 
 
-l2 = likert(items28, grouping=pisana$CNT)
-print(l2)
-summary(l2)
-names(l2)
-plot(l2)
+l28g = likert(items28, grouping=pisana$CNT)
+summary(l28g)
+
+plot(l28g)
+

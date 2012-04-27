@@ -132,19 +132,18 @@ summary.likert <- function(x, ...) {
 #' @param neutral.color color for middle values. Only used when there are an odd
 #'        number of levels.
 #' @param text.size size or text labels
+#' @param text.color the color of text in heat map cells
 #' @param type whether to plot a bar or heat map graphic
 #' @export
 #' @method plot likert
 #' @S3method plot likert
-plot.likert <- function(likert, low.color='blue', high.color='red', 
-			neutral.color='white', text.colour='white', text.size=2, 
-			type=c('bar','heat'), ...)
-{
+plot.likert <- function(likert, text.size=2, type=c('bar','heat'), ...) {
 	if(type[1] == 'bar') {
-		plot.likert.bar(likert, low.color=low.color, high.color=high.color,
-						neutral.color=neutral.color, text.size=text.size, ...)
+		plot.likert.bar(likert, 
+						#low.color=low.color, high.color=high.color, neutral.color=neutral.color, 
+						text.size=text.size, ...)
 	} else {
-		plot.likert.heat(likert, low.color=low.color, high.color=high.color,
+		plot.likert.heat(likert, #low.color=low.color, high.color=high.color,
 						text.size=text.size, ...)
 	}
 }
@@ -152,7 +151,7 @@ plot.likert <- function(likert, low.color='blue', high.color='red',
 #' Internal method.
 #' @seealso plot.likert
 plot.likert.bar <- function(likert, low.color='blue', high.color='red', 
-							neutral.color='white', text.size=2, ...)
+							neutral.color='white', text.size=2, text.color='black', ...)
 {
 	lowrange = 1 : ceiling(likert$nlevels / 2 - likert$nlevels %% 2)
 	highrange = ceiling(likert$nlevels / 2 + 1 ) : likert$nlevels
@@ -206,8 +205,8 @@ plot.likert.bar <- function(likert, low.color='blue', high.color='red',
 
 #' Internal method.
 #' @seealso plot.likert
-plot.likert.heat <- function(likert, low.color='blue', high.color='red', 
-				neutral.color='white', text.colour='white', text.size=2, ...) {
+plot.likert.heat <- function(likert, low.color='white', high.color='blue', 
+				neutral.color='white', text.color='black', text.size=2, ...) {
 	if(!is.null(likert$grouping)) {
 		stop('likert plots with grouping are not supported.')
 	}
@@ -221,7 +220,7 @@ plot.likert.heat <- function(likert, low.color='blue', high.color='red',
  				  label=paste(format(mean, digits=3, drop0trailing=FALSE), 
  							' (', format(sd, digits=2, drop0trailing=FALSE), ')', sep='')), 
  				  size=text.size) +
-		geom_tile() + geom_text(size=text.size, colour=text.colour) + coord_flip() + 
+		geom_tile() + geom_text(size=text.size, colour=text.color) + coord_flip() + 
 		scale_fill_gradient("Percent", low=low.color, high=high.color, limits=c(0,100)) + 
 		xlab('') + ylab('') + 
 		opts(panel.grid.major=theme_blank(), 

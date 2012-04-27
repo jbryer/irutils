@@ -3,12 +3,10 @@ library(ggplot2)
 
 theme_update(panel.background=theme_blank(), panel.grid.major=theme_blank(), panel.border=theme_blank())
 
-
-#Testing the plotting functions
 #How much do you agree or disagree with these statements about reading?
-data(pisa)
+data(pisana)
 
-items28 = pisa[,substr(names(pisa), 1,5) == 'ST24Q']
+items28 = pisana[,substr(names(pisana), 1,5) == 'ST24Q']
 head(items28); ncol(items28)
 names(items28) = c("I read only if I have to.",
 				   "Reading is one of my favorite hobbies.",
@@ -27,19 +25,17 @@ for(i in 1:ncol(items28)) {
 }
 
 l28 = likert(items28)
-print(l28)
+summary(l28)
+
 plot(l28)
 plot(l28, type='heat')
 
-l28g = likert(item28, grouping = pisa$CNT)
-
-plotBarchartTable(items28, low.color='maroon', high.color='burlywood4')
-plotBarchartTable(items28, grouping=pisa$CNT, low.color='maroon', high.color='burlywood4')
-plotHeatmapTable(items28)
-
+#Group by country
+l28g = likert(items28, grouping = pisana$CNT)
+plot(l28g, low.color='maroon', high.color='burlywood4')
 
 #How often do you read these materials because you want to?
-items29 = pisa[,substr(names(pisa), 1,5) == 'ST25Q']
+items29 = pisana[,substr(names(pisana), 1,5) == 'ST25Q']
 head(items29); ncol(items29)
 names(items29) = c("Magazines", "Comic books", "Fiction", "Non-fiction books", "Newspapers")
 for(i in 1:ncol(items29)) {
@@ -48,8 +44,15 @@ for(i in 1:ncol(items29)) {
 						 		 'Several times a month', 'Several times a week'), ordered=TRUE)
 }
 
-plotBarchartTable(items29, low.color='maroon', high.color='burlywood4') + 
+l29 = likert(items29)
+summary(l29)
+
+plot(l29, low.color='maroon', high.color='burlywood4') + 
 	opts(title="How often do you read these materials because you want to?")
-plotBarchartTable(items29, grouping=pisa$CNT, low.color='maroon', high.color='burlywood4') + 
+plot(l29, type='heat') + opts(title="How often do you read these materials because you want to?")
+
+l29g = likert(items29, grouping=pisana$CNT)
+summary(l29g)
+
+plot(l29g, low.color='maroon', high.color='burlywood4') + 
 	opts(title="How often do you read these materials because you want to?")
-plotHeatmapTable(items29) + opts(title="How often do you read these materials because you want to?")

@@ -2,9 +2,9 @@
 \alias{plot.likert.heat}
 \title{Internal method.}
 \usage{
-  plot.likert.heat(likert, low.color = "blue",
-    high.color = "red", neutral.color = "white",
-    text.colour = "white", text.size = 2, ...)
+  plot.likert.heat(likert, low.color = "white",
+    high.color = "blue", neutral.color = "white",
+    text.color = "black", text.size = 2, ...)
 }
 \description{
   Internal method.

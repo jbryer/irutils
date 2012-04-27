@@ -2,9 +2,7 @@
 \alias{plot.likert}
 \title{Plots a set of likert items.}
 \usage{
-  \method{plot}{likert} (likert, low.color = "blue",
-    high.color = "red", neutral.color = "white",
-    text.colour = "white", text.size = 2,
+  \method{plot}{likert} (likert, text.size = 2,
     type = c("bar", "heat"), ...)
 }
 \arguments{
@@ -20,6 +18,8 @@
   when there are an odd number of levels.}
 
   \item{text.size}{size or text labels}
+
+  \item{text.color}{the color of text in heat map cells}
 
   \item{type}{whether to plot a bar or heat map graphic}
 }

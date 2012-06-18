@@ -1,4 +1,6 @@
-
+#'
+#'
+#' @export
 demographics <- function(df, useNA='ifany') {
 	results = data.frame(Category=character(), Frequency=numeric(), Percentage=numeric())
 	
@@ -20,13 +22,13 @@ demographics <- function(df, useNA='ifany') {
 }
 
 
+#'
+#'
+#' @S3method xtable demographics
+#' @export
 xtable.demographics <- function(x, caption = NULL, label = NULL, align = NULL,
 								digits = NULL, display = NULL, ...) {
+	require(xtable)
 	cat('using xtable...')
 	
-}
-
-if(FALSE) {
-	require(xtable)
-	demographics(students[,c('Ethnicity','Gender','School')])
 }

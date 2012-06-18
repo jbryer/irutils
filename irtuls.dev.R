@@ -7,7 +7,7 @@ require(RSQLite)
 require(ipeds)
 
 setwd("~/Dropbox/Projects") #Mac
-setwd("C:/Dropbox/My Dropbox/Projects") #Windows
+setwd("C:/Dropbox/Projects") #Windows
 
 #Package building
 document("irutils")
@@ -30,7 +30,7 @@ tools:::resaveRdaFiles('irutils/data')
 data(surveys)
 drv = dbDriver("SQLite")
 conn = dbConnect(drv, dbname=paste(getwd(), '/irutils/data/ipeds.db', sep=''))
-saveIPEDStoDB(conn, surv=surveys$SurveyID, years=2010:2006)
+saveIPEDStoDB(conn, surv=surveys$SurveyID, years=2010:2009)
 dbListTables(conn)
 
 dbGetQuery(conn, "SELECT SurveyID, Title FROM surveys")
@@ -40,5 +40,7 @@ table(hd$year, useNA='ifany')
 dbGetQuery(conn, "SELECT SurveyID, Title FROM surveys")
 
 dbDisconnect(conn)
+
+#Test Google geocode
 
 

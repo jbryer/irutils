@@ -12,7 +12,8 @@ Depends:
     ggplot2,
     xtable,
     psych,
-    reshape
+    reshape,
+    utils
 Collate:
     'age.R'
     'dbaccess.R'

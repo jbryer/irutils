@@ -33,5 +33,5 @@ geolite.blocks <- data.frame()
 
 .onAttach <- function(libname, pkgname) {
 	pkgEnv = pos.to.env(match('package:irutils', search()))
-	#assignInNamespace("sqlrepos", paste(system.file(package='irutils'), '/data', sep=''), "irutils")
+	utils::assignInNamespace("sqlrepos", paste(system.file(package='irutils'), '/data', sep=''), "irutils")
 }

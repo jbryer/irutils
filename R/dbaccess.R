@@ -9,7 +9,8 @@ getSQLRepos <- function() {
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 setSQLRepos <- function(repos) {
-	utils::assignInNamespaceassignInNamespace("sqlrepos", repos, "irutils")
+	#utils::assignInNamespaceassignInNamespace("sqlrepos", repos, "irutils")
+	sqlrepos <<- repos
 }
 
 #' Returns a list of available queries in the current repository.

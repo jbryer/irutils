@@ -10,7 +10,7 @@ getSQLRepos <- function() {
 #' @export
 setSQLRepos <- function(repos) {
 	#utils::assignInNamespaceassignInNamespace("sqlrepos", repos, "irutils")
-	irutils:::sqlrepos <<- repos 
+	irutils:::sqlrepos <- repos 
 }
 
 #' Returns a list of available queries in the current repository.

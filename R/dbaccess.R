@@ -2,7 +2,7 @@
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 getSQLRepos <- function() {
-	return(irutils:::sqlrepos)
+	return(sqlrepos)
 }
 
 #' Sets the current directory containing SQL files.
@@ -10,7 +10,7 @@ getSQLRepos <- function() {
 #' @export
 setSQLRepos <- function(repos) {
 	#utils::assignInNamespaceassignInNamespace("sqlrepos", repos, "irutils")
-	irutils:::sqlrepos <- repos 
+	sqlrepos <<- repos 
 }
 
 #' Returns a list of available queries in the current repository.

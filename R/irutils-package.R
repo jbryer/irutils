@@ -25,7 +25,7 @@ NULL
 #' @keywords datasets
 NULL
 
-sqlrepos <- NULL
+#sqlrepos <- NULL
 cranMain <- 'http://cran.r-project.org' #Main CRAN
 cranExtra <- 'http://www.stats.ox.ac.uk/pub/RWin' #Windows Binaries for some packages
 geolite.location <- data.frame()

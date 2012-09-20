@@ -2,6 +2,11 @@
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 getSQLRepos <- function() {
+ 	pkgEnv <- pos.to.env(match('package:irutils', search()))
+ 	sqlrepos <- get("sqlrepos", envir=pkgEnv)
+ 	if(is.null(sqlrepos)) {
+ 		sqlrepos <- paste(system.file(package='irutils'), '/data', sep='')
+ 	}
 	return(sqlrepos)
 }
 
@@ -9,8 +14,10 @@ getSQLRepos <- function() {
 #' @author Jason Bryer <jbryer@@excelsior.edu>
 #' @export
 setSQLRepos <- function(repos) {
-	#utils::assignInNamespaceassignInNamespace("sqlrepos", repos, "irutils")
-	sqlrepos <<- repos 
+ 	pkgEnv = pos.to.env(match('package:irutils', search()))
+ 	assign("sqlrepos", 
+ 							 value=paste(system.file(package='irutils'), '/data', sep=''), 
+ 							 envir=pkgEnv)
 }
 
 #' Returns a list of available queries in the current repository.

@@ -25,14 +25,15 @@ NULL
 #' @keywords datasets
 NULL
 
-#sqlrepos <- NULL
 cranMain <- 'http://cran.r-project.org' #Main CRAN
 cranExtra <- 'http://www.stats.ox.ac.uk/pub/RWin' #Windows Binaries for some packages
-geolite.location <- data.frame()
-geolite.blocks <- data.frame()
+#geolite.location <- data.frame()
+#geolite.blocks <- data.frame()
 
 .onAttach <- function(libname, pkgname) {
-	#pkgEnv = pos.to.env(match('package:irutils', search()))
-	#utils::assignInNamespace("sqlrepos", paste(system.file(package='irutils'), '/data', sep=''), "irutils")
-	sqlrepos <<- NULL
+ 	pkgEnv = pos.to.env(match('package:irutils', search()))
+ 	assign("sqlrepos", 
+ 							 value=paste(system.file(package='irutils'), '/data', sep=''), 
+ 							 envir=pkgEnv)
+	#sqlrepos <<- NULL
 }

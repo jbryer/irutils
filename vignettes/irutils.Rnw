@@ -101,56 +101,6 @@ To create your own query, simply place the SQL statement in its own text file en
 \end{figure}
 
 
-
-\section{Visualizing Likert Response Items}
-
-<<>>=
-data(pisa)
-
-items28 = pisa[,substr(names(pisa), 1,5) == 'ST24Q']
-names(items28) = c("I read only if I have to.",
-   "Reading is one of my favorite hobbies.",
-   "I like talking about books with other people.",
-   "I find it hard to finish books.",
-   "I feel happy if I receive a book as a present.",
-   "For me, reading is a waste of time.",
-   "I enjoy going to a bookstore or a library.",
-   "I read only to get information that I need.",
-   "I cannot sit still and read for more than a few minutes.",
-   "I like to express my opinions about books I have read.",
-   "I like to exchange books with my friends")
-for(i in 1:ncol(items28)) {
-	items28[,i] = factor(items28[,i], levels=1:4, 
-		labels=c('Strongly disagree', 'Disagree', 'Agree', 'Strongly Agree'),
-		ordered=TRUE)
-}
-@
-
-\begin{figure}
-\begin{center}
-<<PISAItem28BarchartTable1,fig=TRUE,width=8.0,height=3.0,echo=FALSE,results=hide>>=
-print(plotBarchartTable(items28, low.color='maroon', high.color='burlywood4'))
-@
-\caption{Barchart Table Graphic}
-\label{fig:PISAItem28BarchartTable1}
-\end{center}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-<<PISAItem28BarchartTable2,fig=TRUE,width=7.5,height=9,echo=FALSE,results=hide>>=
-p = plotBarchartTable(items28, grouping=pisa$CNT, low.color='maroon', high.color='burlywood4')
-print(p)
-@
-\caption{Barchart Table Graphic Grouped by Country}
-\label{fig:PISAItem28BarchartTable2}
-\end{center}
-\end{figure}
-
-
-\section{Retention and Completion Rates}
-
-
 \clearpage
 \bibliographystyle{apacite}
 \bibliography{Bibliography}

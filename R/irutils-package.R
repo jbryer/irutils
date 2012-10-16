@@ -10,25 +10,11 @@
 #' @title Utility functions for Institutional Research
 #' @author \email{jason@@bryer.org}
 #' @keywords package institutional research
-#' @import reshape ggplot2 tools
-NULL
-
-#' North American (i.e. Canada, Mexico, and United States) results from the 2009
-#' Programme of International Student Assessment (PISA)
-#' as provided by the Organization for Economic Co-operation and Development (OECD).
-#' See \url{http://www.pisa.oecd.org/} for more information including the code book.
-#'
-#' @name pisa
-#' @docType data
-#' @format a data frame 66,690 ovservations of 437 variables from North America.
-#' @source Organization for Economic Co-operation and Development
-#' @keywords datasets
+#' @import reshape ggplot2 tools xtable
 NULL
 
 cranMain <- 'http://cran.r-project.org' #Main CRAN
 cranExtra <- 'http://www.stats.ox.ac.uk/pub/RWin' #Windows Binaries for some packages
-#geolite.location <- data.frame()
-#geolite.blocks <- data.frame()
 
 .onAttach <- function(libname, pkgname) {
  	pkgEnv = pos.to.env(match('package:irutils', search()))

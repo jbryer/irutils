@@ -5,6 +5,7 @@ require(devtools)
 require(roxygen2)
 require(RSQLite)
 require(ipeds)
+require(xtable)
 
 setwd("~/Dropbox/Projects") #Mac
 setwd("C:/Dropbox/Projects") #Windows

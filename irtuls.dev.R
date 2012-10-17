@@ -2,10 +2,6 @@ install.packages(c('devtools', 'roxygen2', 'RSQLite', 'ipeds'),
 		repos=c('http://cran.r-project.org', 'http://r-forge.r-project.org'))
 
 require(devtools)
-require(roxygen2)
-require(RSQLite)
-require(ipeds)
-require(xtable)
 
 setwd("~/Dropbox/Projects") #Mac
 setwd("C:/Dropbox/Projects") #Windows
@@ -21,7 +17,6 @@ library(irutils)
 ls('package:irutils')
 
 #Load included data
-data(pisana)
 data(students)
 
 #Resave rda files to make them smaller

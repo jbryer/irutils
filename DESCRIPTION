@@ -13,10 +13,11 @@ Depends:
     xtable,
     psych,
     reshape,
-    utils
+    utils,
+    stringr,
+    roxygen2
 Collate:
     'age.R'
-    'dbaccess.R'
     'irutils-package.R'
     'saveIPEDStoDB.R'
     'LocalRepos.R'

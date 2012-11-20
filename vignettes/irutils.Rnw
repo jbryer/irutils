@@ -63,30 +63,6 @@ ls('package:irutils')
 
 
 
-\section{Database Access}
-
-For many Institutional Research offices the institutions student information system (SIS) is the most common source of data. Since virtually all SIS systems are backed by a database, extracting data requires extracting data using queries. Typically the language used to extract data is called structured query language (SQL) regardless if the database is provided by Oracle, Microsoft, or an open source options such as MySQL and PostgreSQL. There are a number of functions in this package that will faciliate extracting data from these databases directly into R.
-
-The database access functions provide an interface to a directory of SQL scripts. SQL scripts are simply a plain text file containing the query. The directory containing these files can be determined or set using the \texttt{getSQLRepos} and \texttt{setSQLRepos} functions, repsectively. 
-
-<<getSQLRepos,eval=TRUE>>=
-getSQLRepos()
-@
-
-By convention, all SQL files must use a \texttt{.sql} file extension. The \texttt{getQueries} function will return a list of all the queries available in the current reposistory.
-
-<<getQueries,eval=TRUE>>=
-getQueries()
-@
-
-The \texttt{getQueryDesc} and \texttt{getParameters} functions will provide some details about the query in question. In particular, the latter will return the parameters that are required for the query to execute.
-
-<<eval=TRUE>>=
-getQueryDesc('TestQuery')
-getParameters('TestQuery')
-@
-
-There are two functions available for executing the query. The \texttt{execQuery} will execute the query and return a data frame. The \texttt{cacheQuery} however, will first look in the specified directory (by default the \texttt{dir} parameter is set to \texttt{getwd()}) for a CSV file that matches the currently request query. That is, the file name (which is returned when this function is executed) is built using a combination of the query name and parameters to uniquely identify it. This is useful when using Sweave and \LaTeX for document preparation where the function may be executed multiple times but the data does not change. It is considerably faster to read data from a flat file then it is to query the database each time.
 
 \subsection{Creating Your Own Query}
 

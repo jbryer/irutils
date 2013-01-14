@@ -5,10 +5,10 @@ irutils is an R package providing common utility functions convenient for instit
 	install.packages(c('devtools', 'roxygen2'), repos='http://cran.r-project.org')
 	install_github('irutils', 'jbryer')
 
-If you are an instituional researcher, it is likely you will want to install the `ipeds` package as well. That package is hosted by R-Forge and can be installed with the following command:
+If you are an instituional researcher, it is likely you will want to install the `ipeds` package as well. That package is hosted by Github and can be installed with the following command:
 
-	install.packages(c('ipeds'), repos=c('http://r-forge.r-project.org', 'http://cran.r-project.org'))
+	install_github('ipes','jbryer')
 
-![How often do you read these materials because you want to?](https://github.com/jbryer/irutils/blob/master/inst/doc/item29.barchart.png?raw=true)
+Note that many of the functions that use to be in `irutils` have been moved to their own package, including [`retention`](http://jason.bryer.org/retention), [`likert`](http://jason.bryer.org/likert), and [`sqlutils`](http://jason.bryer.org/sqlutils).
 
-More documentation to come.
+More information at [http://jason.bryer.org/irutils](http://jason.bryer.org/irutils)
